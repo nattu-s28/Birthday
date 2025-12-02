@@ -395,6 +395,22 @@
             }
         }
 
+        .flame.extinguished {
+            animation: extinguish 0.5s ease-out forwards;
+        }
+
+        @keyframes extinguish {
+            0% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(0.2) translateY(-20px);
+                opacity: 0;
+            }
+        }
+
         /* Balloon Animation */
         .balloon {
             position: absolute;
@@ -481,31 +497,66 @@
             }
         }
 
-        @keyframes floatLetter {
-            0% {
-                opacity: 0;
-                transform: translateY(0) scale(0.5);
-            }
-
-            50% {
-                opacity: 1;
-                transform: translateY(-30px) scale(1.2);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-60px) scale(1);
-            }
-        }
-
         /* Name Reveal Container */
         .name-reveal-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 30px;
             flex-wrap: wrap;
             min-height: 60px;
+            max-width: 100%;
+            padding: 0 10px;
+        }
+
+        .surprise-box {
+            width: 35px;
+            height: 45px;
+            border: 2px solid var(--neon-violet);
+            border-radius: 8px;
+            background: rgba(26, 0, 51, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--text-gold);
+            text-shadow: 0 0 5px var(--neon-pink);
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .surprise-box.revealed {
+            background: var(--neon-pink);
+            color: white;
+            border-color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        /* Animation for letter appearing */
+        .surprise-box span {
+            display: inline-block;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.4);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         /* 
@@ -590,7 +641,7 @@
 
         /* 
          * ========================================
-         * STAGE 5: MESSAGE CARD & GIFT
+         * STAGE 5: MESSAGE & GIFT
          * ========================================
          */
         .message-card {
@@ -1013,15 +1064,41 @@
                 lightCandle(cakeContainer);
                 blastConfetti(decorContainer); // Small extra burst
 
-                message.textContent = 'Make a wish and pop balloons!';
-                btn.textContent = 'Pop the Balloons →';
+                message.textContent = 'Blow the candle to make a wish! 🌬️';
+                btn.textContent = 'Tap to Blow 🌬️';
+
                 cakeStep = 3;
             } else if (cakeStep === 3) {
-                // Step 3: Create Balloons
+                // Step 3: Manual Blow
+                extinguishCandle();
+            } else if (cakeStep === 4) {
+                // Step 4: Create Balloons
                 createBalloons();
                 btn.style.display = 'none';
                 message.textContent = 'Pop all the balloons!';
             }
+        }
+
+        function extinguishCandle() {
+            if (cakeStep !== 3) return; // Prevent double trigger
+
+            const flame = document.querySelector('.flame');
+            if (flame) {
+                flame.classList.add('extinguished');
+                setTimeout(() => flame.remove(), 500);
+            }
+
+            const message = document.getElementById('cake-message');
+            message.textContent = 'Yay! Wish made! ✨';
+
+            const btn = document.getElementById('cake-btn');
+            btn.textContent = 'Pop the Balloons →';
+
+            // Auto proceed to balloons after a short delay
+            setTimeout(() => {
+                cakeStep = 4;
+                handleCakeInteraction(); // Trigger balloon stage
+            }, 1000);
         }
 
         /* --- New Decoration System Functions --- */
@@ -1141,22 +1218,31 @@
 
         function createBalloons() {
             const name = "Thoongu Munchi";
-            const letters = name.replace(/\s/g, '').split('');
+            const letters = name.replace(/\s/g, '').split(''); // "ThoonguMunchi" (13 chars)
             const colors = ['#ff1493', '#ffd700', '#00ff00', '#00bfff', '#9d4edd', '#ff6347', '#ff69b4', '#32cd32', '#ffa500', '#da70d6'];
             const cakeStage = document.getElementById('cake-stage');
             const nameContainer = document.getElementById('name-container');
 
-            // Clear container (keep it empty initially)
+            // Clear container
             nameContainer.innerHTML = '';
-            nameContainer.style.opacity = '0';
+            nameContainer.style.opacity = '1';
 
-            // Create Balloons
+            // Create 13 Surprise Boxes
+            letters.forEach((char, index) => {
+                const box = document.createElement('div');
+                box.classList.add('surprise-box');
+                box.id = `box-${index}`;
+                // Initially empty
+                nameContainer.appendChild(box);
+            });
+
+            // Create 13 Balloons
             letters.forEach((char, i) => {
                 setTimeout(() => {
                     const balloon = document.createElement('div');
                     balloon.classList.add('balloon');
-                    // No text content initially - letter is hidden inside
                     balloon.dataset.letter = char;
+                    balloon.dataset.index = i; // Map to specific box
                     balloon.style.backgroundColor = colors[i % colors.length];
 
                     const leftPos = 10 + Math.random() * 80;
@@ -1170,8 +1256,12 @@
                         if (!this.classList.contains('popped')) {
                             this.classList.add('popped');
 
-                            // Show the hidden letter floating up
-                            showFloatingLetter(this, this.dataset.letter);
+                            // Reveal the specific box
+                            const targetBox = document.getElementById(`box-${this.dataset.index}`);
+                            if (targetBox) {
+                                targetBox.classList.add('revealed');
+                                targetBox.innerHTML = `<span>${this.dataset.letter}</span>`;
+                            }
 
                             balloonsPopped++;
 
@@ -1186,25 +1276,6 @@
                     cakeStage.appendChild(balloon);
                 }, i * 150);
             });
-        }
-
-        function showFloatingLetter(balloon, char) {
-            const letter = document.createElement('div');
-            letter.textContent = char;
-            letter.style.position = 'absolute';
-            letter.style.left = balloon.style.left;
-            letter.style.top = balloon.style.top;
-            letter.style.color = '#fff';
-            letter.style.fontSize = '2rem';
-            letter.style.fontWeight = 'bold';
-            letter.style.pointerEvents = 'none';
-            letter.style.textShadow = '0 0 10px black';
-            letter.style.zIndex = '30';
-            letter.style.animation = 'floatLetter 1s ease-out forwards';
-
-            balloon.parentElement.appendChild(letter);
-
-            setTimeout(() => letter.remove(), 1000);
         }
 
         function finishBalloonStage() {
