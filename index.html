@@ -501,7 +501,7 @@
         .name-reveal-container {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             margin-top: 30px;
             flex-wrap: wrap;
             min-height: 60px;
@@ -510,17 +510,17 @@
         }
 
         .surprise-box {
-            width: 35px;
-            height: 45px;
+            width: 28px;
+            height: 38px;
             border: 2px solid var(--neon-violet);
-            border-radius: 8px;
+            border-radius: 6px;
             background: rgba(26, 0, 51, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: var(--text-gold);
             text-shadow: 0 0 5px var(--neon-pink);
             box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
@@ -1280,27 +1280,40 @@
 
         function finishBalloonStage() {
             const message = document.getElementById('cake-message');
-            // Show the final wish
-            message.textContent = "Happy Birthday my Dear Thoongu Munchi!";
-            message.style.fontSize = "2.5rem";
-            message.style.color = "var(--text-gold)";
-            message.style.textShadow = "0 0 20px var(--neon-pink)";
+            const nameContainer = document.getElementById('name-container');
 
-            // Add a proceed button
-            const btn = document.getElementById('cake-btn');
-            btn.textContent = "See Memories →";
-            btn.style.display = 'inline-block';
-            btn.onclick = nextStage;
+            // 1. Hide the instruction message
+            message.style.opacity = '0';
 
-            // Confetti celebration
-            blastConfetti(document.getElementById('partyDecor'));
+            // 2. Fade out the boxes
+            nameContainer.style.transition = 'opacity 1s ease';
+            nameContainer.style.opacity = '0';
+
+            setTimeout(() => {
+                // 3. Clear boxes and show wish
+                nameContainer.innerHTML = "Happy Birthday my Dear Thoongu Munchi!";
+
+                // 4. Style the wish
+                nameContainer.style.fontFamily = "'Sacramento', cursive";
+                nameContainer.style.fontSize = "3rem";
+                nameContainer.style.color = "var(--text-gold)";
+                nameContainer.style.textShadow = "0 0 20px var(--neon-pink)";
+                nameContainer.style.display = "block"; // Ensure block display for text
+                nameContainer.style.textAlign = "center";
+
+                // 5. Fade back in
+                nameContainer.style.opacity = '1';
+
+                // Add a proceed button
+                const btn = document.getElementById('cake-btn');
+                btn.textContent = "See Memories →";
+                btn.style.display = 'inline-block';
+                btn.onclick = nextStage;
+
+                // Confetti celebration
+                blastConfetti(document.getElementById('partyDecor'));
+            }, 1000);
         }
-
-        /* 
-         * ----------------------------------------
-         * STAGE 4: Photo Cards
-         * ----------------------------------------
-         */
         function viewCard(card) {
             if (!card.classList.contains('viewed')) {
                 card.classList.add('viewed');
