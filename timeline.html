@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Timeline</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Cosmic Theme Variables */
+        :root {
+            --bg-dark: #0a0014;
+            --bg-violet: #1a0033;
+            --neon-pink: #ff1493;
+            --neon-violet: #9d4edd;
+            --text-silver: #e0e0e0;
+            --text-pink: #ffc0cb;
+            --text-gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at 50% 50%, var(--bg-violet) 0%, var(--bg-dark) 100%);
+            color: var(--text-silver);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Starfield Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+            position: fixed;
+            /* Fix background */
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3.5rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: var(--text-gold);
+            letter-spacing: 1px;
+        }
+
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        /* Vertical Line */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: linear-gradient(to bottom, transparent, var(--neon-violet), var(--neon-pink), transparent);
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px var(--neon-violet);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            /* Reduced spacing for density */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            animation: slideIn 0.8s ease-out forwards;
+        }
+
+        /* Staggered animation for many items */
+        .timeline-item:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .timeline-item:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        /* 
+         * FLIP CARD STYLES 
+         */
+        .timeline-content {
+            position: relative;
+            width: 45%;
+            aspect-ratio: 1 / 1;
+            /* Make it square */
+            perspective: 1000px;
+            /* Enable 3D space */
+            cursor: pointer;
+        }
+
+        .content-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        /* Hover Effect */
+        .timeline-content:hover .content-inner {
+            transform: rotateY(180deg);
+        }
+
+        .content-front,
+        .content-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+            border: 2px solid var(--neon-violet);
+        }
+
+        .content-front {
+            background: rgba(26, 0, 51, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2;
+            padding: 0;
+            /* Reset padding for full width borders */
+            justify-content: flex-start;
+            /* Stack from top */
+        }
+
+        .content-back {
+            background: #000;
+            transform: rotateY(180deg);
+            overflow: hidden;
+            padding: 0;
+            /* Remove padding for full image */
+            border-color: var(--neon-pink);
+        }
+
+        .content-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 13px;
+            /* Slightly less than container */
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .content-back:hover img {
+            opacity: 1;
+        }
+
+        /* Positioning content left/right */
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: auto;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: auto;
+        }
+
+        /* Align text based on side - CENTERED for this design */
+        .timeline-item:nth-child(odd) .content-front,
+        .timeline-item:nth-child(even) .content-front {
+            align-items: center;
+            text-align: center;
+        }
+
+
+        /* Dot on the line */
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--text-gold);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px var(--text-gold);
+            z-index: 2;
+        }
+
+        .date {
+            font-family: 'Sacramento', cursive;
+            font-size: 1.8rem;
+            color: var(--neon-pink);
+            margin: 0;
+            width: 100%;
+            padding: 10px;
+            border-bottom: 2px solid var(--neon-pink);
+            flex: 0 0 auto;
+        }
+
+        .title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+            width: 100%;
+            padding: 10px;
+            border-bottom: 2px solid var(--neon-pink);
+            flex: 0 0 auto;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            color: var(--text-silver);
+            line-height: 1.4;
+            font-style: italic;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .back-btn {
+            display: block;
+            width: fit-content;
+            margin: 40px auto 0;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.6);
+        }
+
+        .final-message {
+            text-align: center;
+            margin-top: 80px;
+            padding: 30px;
+            border: 2px dashed var(--text-gold);
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .final-message h2 {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.5rem;
+            color: var(--text-gold);
+            margin-bottom: 15px;
+        }
+
+        .final-message p {
+            font-size: 1.2rem;
+            color: var(--text-pink);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                justify-content: flex-start;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+                margin-right: 0 !important;
+                margin-left: 0 !important;
+            }
+
+            /* Reset alignment for mobile */
+            .timeline-item:nth-child(odd) .content-front,
+            .timeline-item:nth-child(even) .content-front {
+                align-items: center;
+                text-align: center;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Our Loveline</h1>
+        </header>
+
+        <div class="timeline">
+            <!-- 2006 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">27.09.2006</div>
+                            <div class="title">My Born Date</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">28.12.2006</div>
+                            <div class="title">Her Born Date</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2021 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">13.11.2021</div>
+                            <div class="title">First Step of Our Love</div>
+                            <div class="description">(Failure)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2022 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">20.12.2022</div>
+                            <div class="title">Our First Train Travel</div>
+                            <div class="description">(Karnataka)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">27.12.2022</div>
+                            <div class="title">Your most painfull day with me</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">28.12.2022</div>
+                            <div class="title">Your First birthday with me</div>
+                            <div class="description">(Most Happiest Day in my life)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2024 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">13.01.2024</div>
+                            <div class="title">Our Love Success Date</div>
+                            <div class="description">(Proposed in Mobile)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">22.01.2024</div>
+                            <div class="title">Our Love Success Date</div>
+                            <div class="description">(Proposed in Classroom)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">07.02.2024</div>
+                            <div class="title">Our First kiss in your forehead</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">14.02.2024</div>
+                            <div class="title">I Gave the First flower from me</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">16.02.2024</div>
+                            <div class="title">Our My first Peace In your Lap</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">17.02.2024</div>
+                            <div class="title">Our First Hug</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">05.03.2024</div>
+                            <div class="title">Our First Longest Call</div>
+                            <div class="description">(4:53:39)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">13.03.2024</div>
+                            <div class="title">Our letter Caught by your mom</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">11.06.2024</div>
+                            <div class="title">Our First Travel</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">19.10.2024</div>
+                            <div class="title">Most Painfull Day by me</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">28.12.2024</div>
+                            <div class="title">Most painful birthday of yours to me</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2025 -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">13.01.2025</div>
+                            <div class="title">Your First Cry Heard by me</div>
+                            <div class="description">(Never felt this pain)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">13.02.2025</div>
+                            <div class="title">My last Hope by letter</div>
+                            <div class="description">(Now it destroyed that by your friends)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">13.04.2025</div>
+                            <div class="title">Unexpected Call from you</div>
+                            <div class="description">and told my mistake</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">01.05.2025</div>
+                            <div class="title">My Visit for see you in your temple Festival</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">04.05.2025</div>
+                            <div class="title">You told the Hope Word</div>
+                            <div class="description">(Enaku Nerya time venum)</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">11.05.2025</div>
+                            <div class="title">Veerapandi festival with you</div>
+                            <div class="description">without you knowing me.</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">30.06.2025</div>
+                            <div class="title">You Came again for my studies</div>
+                            <div class="description">with lot of pain.</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">20.07.2025</div>
+                            <div class="title">I realished you are talking with me with the inside pain</div>
+                            <div class="description">without expressing anything for me an I told you to go.</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">27.09.2025</div>
+                            <div class="title">You called me for my birthday unexpected</div>
+                            <div class="description">and talked 12.13 minites</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">20.10.2025</div>
+                            <div class="title">Visit for see you in Diwali in rain</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="content-inner">
+                        <div class="content-front">
+                            <div class="date">28.12.2025</div>
+                            <div class="title">Your Birthday</div>
+                            <div class="description">I Very Happie with lot of happiness and hope come again into my
+                                life I still wating with lots of love on you.</div>
+                        </div>
+                        <div class="content-back">
+                            <img src="images/placeholder.jpg" alt="Memory">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="final-message">
+            <h2>YESTERDAY - TODAY - TOMMOROW</h2>
+            <p>Every time I'm here for only you ❤️</p>
+        </div>
+
+        <a href="index.html" class="back-btn">← Back to Surprise</a>
+    </div>
+
+</body>
+
+</html>
