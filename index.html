@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Birthday Surprise</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* 
+         * ========================================
+         * COSMIC THEME - Mobile First Design
+         * ========================================
+         */
+        :root {
+            --bg-dark: #0a0014;
+            --bg-violet: #1a0033;
+            --neon-pink: #ff1493;
+            --neon-violet: #9d4edd;
+            --text-silver: #e0e0e0;
+            --text-pink: #ffc0cb;
+            --text-gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at 50% 50%, var(--bg-violet) 0%, var(--bg-dark) 100%);
+            color: var(--text-silver);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated starfield background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent),
+                radial-gradient(1px 1px at 33% 80%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* 
+         * ========================================
+         * STAGE CONTAINER
+         * ========================================
+         */
+        .stage {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            max-width: 90%;
+            width: 600px;
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stage.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 
+         * ========================================
+         * STAGE 1: COUNTDOWN
+         * ========================================
+         */
+        #countdown-stage h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 2rem;
+            color: var(--text-pink);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        #countdown-timer {
+            font-size: 8rem;
+            font-weight: 700;
+            color: #fff;
+            display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
+            text-shadow:
+                0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink),
+                0 0 30px var(--neon-pink), 0 0 40px var(--neon-violet),
+                0 0 70px var(--neon-violet), 0 0 80px var(--neon-violet),
+                0 0 100px var(--neon-violet);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                text-shadow:
+                    0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink),
+                    0 0 30px var(--neon-pink), 0 0 40px var(--neon-violet),
+                    0 0 70px var(--neon-violet), 0 0 80px var(--neon-violet),
+                    0 0 100px var(--neon-violet);
+            }
+
+            50% {
+                transform: scale(1.05);
+                text-shadow:
+                    0 0 15px var(--neon-violet), 0 0 25px var(--neon-violet),
+                    0 0 35px var(--neon-violet), 0 0 45px var(--neon-pink),
+                    0 0 75px var(--neon-pink), 0 0 85px var(--neon-pink),
+                    0 0 110px var(--neon-pink);
+            }
+        }
+
+        /* 
+         * ========================================
+         * STAGE 2: GREETING
+         * ========================================
+         */
+        #greeting-stage img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 30px;
+            animation: bounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.5));
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #greeting-text {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.5rem;
+            line-height: 1.4;
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+            min-height: 3.5rem;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.8), 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        #greeting-text::after {
+            content: '|';
+            animation: blink 0.8s infinite;
+            margin-left: 3px;
+        }
+
+        #greeting-text.typing-complete::after {
+            content: '';
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        #greeting-stage p {
+            font-size: 1rem;
+            color: var(--text-silver);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 
+         * ========================================
+         * STAGE 3: INTERACTIVE CAKE
+         * ========================================
+         */
+        #cake-stage {
+            position: relative;
+        }
+
+        #cake-stage img {
+            width: 250px;
+            height: auto;
+            margin: 0 auto 20px auto;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.3));
+        }
+
+        #cake-message {
+            font-family: 'Sacramento', cursive;
+            font-size: 2rem;
+            color: var(--neon-pink);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.6);
+            min-height: 2.5rem;
+        }
+
+        .flag-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .flag-banner.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .flag {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid;
+            animation: wave 2s ease-in-out infinite;
+        }
+
+        .flag:nth-child(1) {
+            left: 5%;
+            border-top-color: #ff1493;
+            animation-delay: 0s;
+        }
+
+        .flag:nth-child(2) {
+            left: 15%;
+            border-top-color: #ffd700;
+            animation-delay: 0.1s;
+        }
+
+        .flag:nth-child(3) {
+            left: 25%;
+            border-top-color: #00ff00;
+            animation-delay: 0.2s;
+        }
+
+        .flag:nth-child(4) {
+            left: 35%;
+            border-top-color: #00bfff;
+            animation-delay: 0.3s;
+        }
+
+        .flag:nth-child(5) {
+            left: 45%;
+            border-top-color: #9d4edd;
+            animation-delay: 0.4s;
+        }
+
+        .flag:nth-child(6) {
+            left: 55%;
+            border-top-color: #ff6347;
+            animation-delay: 0.5s;
+        }
+
+        .flag:nth-child(7) {
+            left: 65%;
+            border-top-color: #ff69b4;
+            animation-delay: 0.6s;
+        }
+
+        .flag:nth-child(8) {
+            left: 75%;
+            border-top-color: #32cd32;
+            animation-delay: 0.7s;
+        }
+
+        .flag:nth-child(9) {
+            left: 85%;
+            border-top-color: #ffa500;
+            animation-delay: 0.8s;
+        }
+
+        .flag:nth-child(10) {
+            left: 95%;
+            border-top-color: #da70d6;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            pointer-events: none;
+            animation: confettiFall 2s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(400px) rotate(720deg);
+            }
+        }
+
+        /* Balloon Animation */
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            animation: floatUp 4s ease-out forwards;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .balloon::after {
+            content: '▼';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .balloon.popped {
+            animation: pop 0.3s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(0.5);
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(-400px) scale(1) rotate(var(--rotate));
+            }
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 
+         * ========================================
+         * STAGE 4: PHOTO CARDS
+         * ========================================
+         */
+        #photo-stage h2 {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.5rem;
+            color: var(--neon-pink);
+            margin-bottom: 10px;
+        }
+
+        #photo-stage p {
+            font-size: 0.9rem;
+            color: var(--text-silver);
+            margin-bottom: 30px;
+        }
+
+        .card-stack {
+            position: relative;
+            width: 280px;
+            height: 350px;
+            margin: 0 auto 30px;
+        }
+
+        .photo-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid var(--neon-pink);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-silver);
+            font-size: 1.2rem;
+        }
+
+        .photo-card:nth-child(1) {
+            transform: rotate(-5deg) translateY(0);
+            z-index: 4;
+            background-image: url('images/moment1.png');
+        }
+
+        .photo-card:nth-child(2) {
+            transform: rotate(3deg) translateY(10px);
+            z-index: 3;
+            background-image: url('images/moment2.png');
+        }
+
+        .photo-card:nth-child(3) {
+            transform: rotate(-2deg) translateY(20px);
+            z-index: 2;
+            background-image: url('images/moment3.png');
+        }
+
+        .photo-card:nth-child(4) {
+            transform: rotate(4deg) translateY(30px);
+            z-index: 1;
+            background-image: url('images/moment4.png');
+        }
+
+        .photo-card.viewed {
+            transform: translateX(150%) rotate(20deg) !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #photo-next-btn {
+            display: none;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* 
+         * ========================================
+         * STAGE 5: MESSAGE CARD & GIFT
+         * ========================================
+         */
+        .message-card {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            margin: 0 auto 20px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .message-card.opened .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+            color: white;
+            font-family: 'Sacramento', cursive;
+            font-size: 2.5rem;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: var(--text-silver);
+            transform: rotateY(180deg);
+            font-size: 1rem;
+            line-height: 1.6;
+            overflow-y: auto;
+        }
+
+        #message-next-btn {
+            display: none;
+        }
+
+        #gift-section {
+            text-align: center;
+        }
+
+        #gift-section p {
+            font-size: 1.2rem;
+            color: var(--text-pink);
+            margin-bottom: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        #gift-box {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        #gift-box:hover {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .final-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 0, 20, 0.95);
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .final-overlay.show {
+            display: flex;
+        }
+
+        .final-overlay h2 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3rem;
+            color: var(--text-gold);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        /* 
+         * ========================================
+         * BUTTON STYLING
+         * ========================================
+         */
+        .btn {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4), 0 0 20px rgba(157, 78, 221, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1s forwards;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 20, 147, 0.6), 0 0 30px rgba(157, 78, 221, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* 
+         * ========================================
+         * RESPONSIVE DESIGN
+         * ========================================
+         */
+        @media (max-width: 600px) {
+            #countdown-stage h1 {
+                font-size: 1.5rem;
+            }
+
+            #countdown-timer {
+                font-size: 6rem;
+            }
+
+            #greeting-text {
+                font-size: 2rem;
+            }
+
+            #greeting-stage img {
+                width: 120px;
+            }
+
+            #cake-stage img {
+                width: 200px;
+            }
+
+            #cake-message {
+                font-size: 1.7rem;
+            }
+
+            .card-stack {
+                width: 240px;
+                height: 300px;
+            }
+
+            .btn {
+                padding: 12px 28px;
+                font-size: 1rem;
+            }
+
+            .card-front {
+                font-size: 2rem;
+            }
+
+            .card-back {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            #countdown-timer {
+                font-size: 5rem;
+            }
+
+            #greeting-text {
+                font-size: 1.7rem;
+            }
+
+            #cake-stage img {
+                width: 180px;
+            }
+
+            .card-stack {
+                width: 200px;
+                height: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================================
+         STAGE 1: COUNTDOWN
+         ======================================== -->
+    <div id="countdown-stage" class="stage active">
+        <h1>Crafting your special moment...</h1>
+        <div id="countdown-timer">3</div>
+    </div>
+
+    <!-- ========================================
+         STAGE 2: GREETING
+         ======================================== -->
+    <div id="greeting-stage" class="stage">
+        <img src="images/panda.png" alt="Cute character">
+        <h2 id="greeting-text"></h2>
+        <p>Yes, it's YOU! A little surprise awaits...</p>
+        <button class="btn" onclick="nextStage()">Start the surprise &rarr;</button>
+    </div>
+
+    <!-- ========================================
+         STAGE 3: INTERACTIVE CAKE
+         ======================================== -->
+    <div id="cake-stage" class="stage">
+        <div class="flag-banner" id="flag-banner">
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+            <div class="flag"></div>
+        </div>
+        <h3 id="cake-message">Decorate the Cake</h3>
+        <img src="images/cake.png" alt="Birthday Cake" id="cake-img">
+        <button class="btn" id="cake-btn" onclick="handleCakeInteraction()">Decorate &rarr;</button>
+    </div>
+
+    <!-- ========================================
+         STAGE 4: PHOTO CARDS
+         ======================================== -->
+    <div id="photo-stage" class="stage">
+        <h2>Some Sweet Moments</h2>
+        <p>(Click to view)</p>
+        <div class="card-stack">
+            <div class="photo-card" onclick="viewCard(this)">Moment 1</div>
+            <div class="photo-card" onclick="viewCard(this)">Moment 2</div>
+            <div class="photo-card" onclick="viewCard(this)">Moment 3</div>
+            <div class="photo-card" onclick="viewCard(this)">Moment 4</div>
+        </div>
+        <button class="btn" id="photo-next-btn" onclick="nextStage()">Open My Message &rarr;</button>
+    </div>
+
+    <!-- ========================================
+         STAGE 5: MESSAGE & GIFT
+         ======================================== -->
+    <div id="final-stage" class="stage">
+        <div class="message-card" id="message-card" onclick="openCard()">
+            <div class="card-inner">
+                <div class="card-front">
+                    Tap to Open
+                </div>
+                <div class="card-back">
+                    <p>
+                        Happy Birthday, my dearest! 🎉<br><br>
+                        On this special day, I want you to know how much you mean to me.
+                        Your smile lights up my world, and your kindness inspires me every day.
+                        May this year bring you endless joy, amazing adventures, and all the
+                        love you deserve. Here's to another year of wonderful memories together!
+                        <br><br>
+                        With all my love,<br>
+                        Always ❤️
+                    </p>
+                </div>
+            </div>
+        </div>
+        <button class="btn" id="message-next-btn" onclick="showGift()">Next &rarr;</button>
+
+        <div id="gift-section" style="display: none;">
+            <p>Tap the gift!</p>
+            <img src="images/gift.png" alt="Gift Box" id="gift-box" onclick="openGift()">
+        </div>
+    </div>
+
+    <!-- Final Overlay -->
+    <div class="final-overlay" id="final-overlay">
+        <h2>Happy Birthday! 🎊</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; color: var(--text-silver);">
+            Hope you loved your surprise!
+        </p>
+        <button class="btn" style="opacity: 1; animation: none;" onclick="window.location.reload()">
+            Replay &hearts;
+        </button>
+    </div>
+
+    <script>
+        /* 
+         * ========================================
+         * JAVASCRIPT - Stage Management & Animations
+         * ========================================
+         */
+
+        // Configuration
+        const GREETING_TEXT = "A Cutiepie was born today, 21 years ago!";
+        const STAGES = ['countdown-stage', 'greeting-stage', 'cake-stage', 'photo-stage', 'final-stage'];
+        let currentStageIndex = 0;
+        let cakeStep = 1;
+        let cardsViewed = 0;
+        let balloonsPopped = 0;
+        const totalBalloons = 10;
+
+        /* 
+         * ----------------------------------------
+         * STAGE MANAGEMENT
+         * ----------------------------------------
+         */
+        function nextStage() {
+            document.getElementById(STAGES[currentStageIndex]).classList.remove('active');
+            currentStageIndex++;
+            if (currentStageIndex < STAGES.length) {
+                document.getElementById(STAGES[currentStageIndex]).classList.add('active');
+                if (currentStageIndex === 1) {
+                    setTimeout(typewriterEffect, 300);
+                }
+            }
+        }
+
+        /* 
+         * ----------------------------------------
+         * STAGE 1: Countdown Timer
+         * ----------------------------------------
+         */
+        function startCountdown() {
+            let count = 3;
+            const countdownElement = document.getElementById('countdown-timer');
+
+            const countdownInterval = setInterval(() => {
+                count--;
+                countdownElement.textContent = count;
+
+                if (count === 0) {
+                    clearInterval(countdownInterval);
+                    setTimeout(() => nextStage(), 800);
+                }
+            }, 1000);
+        }
+
+        /* 
+         * ----------------------------------------
+         * STAGE 2: Typewriter Effect
+         * ----------------------------------------
+         */
+        function typewriterEffect() {
+            const textElement = document.getElementById('greeting-text');
+            textElement.textContent = '';
+            let charIndex = 0;
+
+            const typingInterval = setInterval(() => {
+                if (charIndex < GREETING_TEXT.length) {
+                    textElement.textContent += GREETING_TEXT.charAt(charIndex);
+                    charIndex++;
+                } else {
+                    clearInterval(typingInterval);
+                    textElement.classList.add('typing-complete');
+                }
+            }, 80);
+        }
+
+        /* 
+         * ----------------------------------------
+         * STAGE 3: Interactive Cake
+         * ----------------------------------------
+         */
+        function handleCakeInteraction() {
+            const button = document.getElementById('cake-btn');
+            const message = document.getElementById('cake-message');
+            const banner = document.getElementById('flag-banner');
+            const cakeImg = document.getElementById('cake-img');
+
+            if (cakeStep === 1) {
+                // Step 1: Decorate
+                banner.classList.add('show');
+                message.textContent = 'Light the Candle';
+                button.textContent = 'Light the Candle →';
+                cakeStep = 2;
+            } else if (cakeStep === 2) {
+                // Step 2: Light Candle (Confetti)
+                createConfettiBurst(cakeImg);
+                message.textContent = 'Happy Birthday, Cutiepie!';
+                button.textContent = 'Pop the Balloons →';
+                cakeStep = 3;
+            } else if (cakeStep === 3) {
+                // Step 3: Create Balloons
+                createBalloons();
+                button.style.display = 'none';
+                message.textContent = 'Pop all the balloons!';
+            }
+        }
+
+        function createConfettiBurst(sourceElement) {
+            const rect = sourceElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const colors = ['#ff1493', '#ffd700', '#00ff00', '#00bfff', '#9d4edd', '#ff6347', '#ff69b4'];
+
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${centerX}px`;
+                confetti.style.top = `${centerY}px`;
+
+                const angle = (Math.PI * 2 * i) / 40;
+                const velocity = 100 + Math.random() * 100;
+                confetti.style.setProperty('--x-end', `${Math.cos(angle) * velocity}px`);
+                confetti.style.setProperty('--y-end', `${Math.sin(angle) * velocity}px`);
+
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 2000);
+            }
+        }
+
+        /* 
+         * ----------------------------------------
+         * BALLOON ANIMATION
+         * ----------------------------------------
+         */
+        function createBalloons() {
+            const colors = ['#ff1493', '#ffd700', '#00ff00', '#00bfff', '#9d4edd', '#ff6347', '#ff69b4', '#32cd32', '#ffa500', '#da70d6'];
+            const cakeStage = document.getElementById('cake-stage');
+
+            for (let i = 0; i < totalBalloons; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.classList.add('balloon');
+                    balloon.style.backgroundColor = colors[i];
+                    balloon.style.left = `${Math.random() * 80 + 10}%`;
+                    balloon.style.setProperty('--rotate', `${Math.random() * 40 - 20}deg`);
+                    balloon.style.animationDelay = `${Math.random() * 0.5}s`;
+
+                    balloon.onclick = function () {
+                        if (!this.classList.contains('popped')) {
+                            this.classList.add('popped');
+                            balloonsPopped++;
+
+                            if (balloonsPopped === totalBalloons) {
+                                setTimeout(() => {
+                                    nextStage();
+                                }, 1000);
+                            }
+                        }
+                    };
+
+                    cakeStage.appendChild(balloon);
+                }, i * 200);
+            }
+        }
+
+        /* 
+         * ----------------------------------------
+         * STAGE 4: Photo Cards
+         * ----------------------------------------
+         */
+        function viewCard(card) {
+            if (!card.classList.contains('viewed')) {
+                card.classList.add('viewed');
+                cardsViewed++;
+
+                if (cardsViewed === 4) {
+                    document.getElementById('photo-next-btn').style.display = 'inline-block';
+                }
+            }
+        }
+
+        /* 
+         * ----------------------------------------
+         * STAGE 5: Message Card & Gift
+         * ----------------------------------------
+         */
+        function openCard() {
+            const card = document.getElementById('message-card');
+            if (!card.classList.contains('opened')) {
+                card.classList.add('opened');
+                card.onclick = null;
+                setTimeout(() => {
+                    document.getElementById('message-next-btn').style.display = 'inline-block';
+                }, 1000);
+            }
+        }
+
+        function showGift() {
+            document.querySelector('.message-card').style.display = 'none';
+            document.getElementById('message-next-btn').style.display = 'none';
+            document.getElementById('gift-section').style.display = 'block';
+        }
+
+        function openGift() {
+            // Massive confetti explosion
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    const colors = ['#ff1493', '#ffd700', '#00ff00', '#00bfff', '#9d4edd', '#ff6347', '#ff69b4'];
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = `${Math.random() * window.innerWidth}px`;
+                    confetti.style.top = '0px';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 2000);
+                }, i * 10);
+            }
+
+            setTimeout(() => {
+                document.getElementById('final-overlay').classList.add('show');
+            }, 500);
+        }
+
+        /* 
+         * ----------------------------------------
+         * Initialize on Page Load
+         * ----------------------------------------
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            startCountdown();
+        });
+    </script>
+
+</body>
+
+</html>
