@@ -126,7 +126,8 @@
         }
 
         #countdown-timer {
-            font-size: 8rem;
+            font-size: 3.5rem;
+            /* Reduced for full date string */
             font-weight: 700;
             color: #fff;
             display: inline-block;
@@ -136,7 +137,18 @@
                 0 0 30px var(--neon-pink), 0 0 40px var(--neon-violet),
                 0 0 70px var(--neon-violet), 0 0 80px var(--neon-violet),
                 0 0 100px var(--neon-violet);
+            white-space: nowrap;
         }
+
+        .countdown-label {
+            display: block;
+            font-size: 1rem;
+            color: var(--text-gold);
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+
 
         @keyframes pulse {
 
@@ -717,6 +729,135 @@
 
         /* 
          * ========================================
+         * GLITCH TYPEWRITER EFFECT
+         * ========================================
+         */
+        .glitch-wrapper {
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2s forwards;
+            /* 2s delay for "slowly" */
+            min-height: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .glitch-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 2px;
+            text-shadow:
+                0 0 5px var(--neon-pink),
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--neon-pink),
+                0 0 40px var(--neon-violet),
+                0 0 80px var(--neon-violet);
+        }
+
+        /* Typewriter Animation */
+        .glitch-text::before {
+            content: "Advance Happie Birthday Mah....! ❤️";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            overflow: hidden;
+            border-right: 2px solid var(--neon-violet);
+            color: #fff;
+            text-shadow:
+                0 0 5px var(--neon-pink),
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--neon-pink),
+                0 0 40px var(--neon-violet),
+                0 0 80px var(--neon-violet);
+            animation: typing 3s steps(30, end) 2.5s forwards, blinkCursor 0.75s step-end infinite;
+            white-space: nowrap;
+        }
+
+        /* Glitch Animation Layer */
+        .glitch-text::after {
+            content: "Advance Happie Birthday Mah....! ❤️";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            overflow: hidden;
+            color: #fff;
+            opacity: 0.8;
+            animation: typing 3s steps(30, end) 2.5s forwards, glitch 1s infinite alternate-reverse;
+            text-shadow: -2px 0 red, 2px 0 blue;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            background: transparent;
+            white-space: nowrap;
+        }
+
+        /* Ensure the base text is hidden (hack to maintain layout width) */
+        .glitch-text span {
+            visibility: hidden;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blinkCursor {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--neon-violet)
+            }
+        }
+
+        @keyframes glitch {
+            0% {
+                clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%);
+                transform: translate(2px, 0);
+            }
+
+            20% {
+                clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%);
+                transform: translate(-2px, 0);
+            }
+
+            40% {
+                clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%);
+                transform: translate(2px, 0);
+            }
+
+            60% {
+                clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%);
+                transform: translate(-2px, 0);
+            }
+
+            80% {
+                clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
+                transform: translate(10px, -5px);
+            }
+
+            100% {
+                clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
+                transform: translate(-2px, 0);
+            }
+        }
+
+        /* 
+         * ========================================
          * RESPONSIVE DESIGN
          * ========================================
          */
@@ -791,8 +932,27 @@
          STAGE 1: COUNTDOWN
          ======================================== -->
     <div id="countdown-stage" class="stage active">
-        <h1>Crafting your special moment...</h1>
-        <div id="countdown-timer">3</div>
+        <audio id="countdown-audio" src="Audio/love.mp3" loop preload="auto"></audio>
+        <button id="music-toggle" class="btn"
+            style="display: none; position: absolute; top: 10px; right: 10px; z-index: 100; padding: 10px 20px; font-size: 0.9rem;"
+            onclick="toggleMusic()">🎵 Play Music</button>
+        <h1>Counting down to your(my)Special Day...</h1>
+        <div id="countdown-timer">Loading...</div>
+        <div class="countdown-label">DAYS : HOURS : MINS : SECS</div>
+
+        <div id="countdown-controls">
+            <!-- Hidden initially, shown when countdown ends -->
+            <button id="enter-btn" class="btn" style="display: none; margin-top: 30px;" onclick="nextStage()">Enter to
+                Your 19th Year &rarr;</button>
+
+            <!-- Glitch Text Section -->
+            <div class="glitch-wrapper">
+                <div class="glitch-text">
+                    <!-- Invisible spacer -->
+                    <span>Advance Happie Birthday Mah....! ❤️</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ========================================
@@ -887,6 +1047,14 @@
          * ----------------------------------------
          */
         function nextStage() {
+            // Stop countdown music when leaving the first stage
+            if (currentStageIndex === 0) {
+                const audio = document.getElementById('countdown-audio');
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            }
             document.getElementById(STAGES[currentStageIndex]).classList.remove('active');
             currentStageIndex++;
             if (currentStageIndex < STAGES.length) {
@@ -903,18 +1071,40 @@
          * ----------------------------------------
          */
         function startCountdown() {
-            let count = 3;
             const countdownElement = document.getElementById('countdown-timer');
+            const enterBtn = document.getElementById('enter-btn');
 
-            const countdownInterval = setInterval(() => {
-                count--;
-                countdownElement.textContent = count;
+            // Target Date: December 28, 2025 00:00:00
+            const targetDate = new Date('December 28, 2025 00:00:00').getTime();
 
-                if (count === 0) {
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    // Countdown finished
+                    countdownElement.textContent = "It's Time! 🎉";
+                    const label = document.querySelector('.countdown-label');
+                    if (label) label.style.display = 'none';
+
+                    enterBtn.style.display = 'inline-block';
                     clearInterval(countdownInterval);
-                    setTimeout(() => nextStage(), 800);
+                    return;
                 }
-            }, 1000);
+
+                // Calculations
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Formatting
+                countdownElement.textContent =
+                    `${days} : ${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`;
+            };
+
+            const countdownInterval = setInterval(updateTimer, 1000);
+            updateTimer(); // Initial call
         }
 
         /* 
@@ -1283,8 +1473,39 @@
          * ----------------------------------------
          */
         document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('countdown-audio');
+            const musicBtn = document.getElementById('music-toggle');
+
+            if (audio) {
+                audio.volume = 1.0;
+                const playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Autoplay prevented:", error);
+                        // Show the play button
+                        if (musicBtn) {
+                            musicBtn.style.display = 'block';
+                            musicBtn.style.animation = 'pulse 1.5s infinite';
+                        }
+                    });
+                }
+            }
             startCountdown();
         });
+
+        function toggleMusic() {
+            const audio = document.getElementById('countdown-audio');
+            const musicBtn = document.getElementById('music-toggle');
+            if (audio.paused) {
+                audio.play();
+                musicBtn.textContent = "🔇 Stop Music";
+                musicBtn.style.animation = 'none'; // Stop pulsing once clicked
+            } else {
+                audio.pause();
+                musicBtn.textContent = "🎵 Play Music";
+            }
+        }
     </script>
 
 </body>
