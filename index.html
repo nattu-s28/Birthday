@@ -867,7 +867,16 @@
             }
 
             #countdown-timer {
-                font-size: 6rem;
+                font-size: 2rem;
+                /* Adjusted for full date string */
+            }
+
+            .countdown-label {
+                font-size: 0.8rem;
+            }
+
+            .glitch-text {
+                font-size: 1rem;
             }
 
             #greeting-text {
@@ -907,8 +916,14 @@
 
         @media (max-width: 400px) {
             #countdown-timer {
-                font-size: 5rem;
+                font-size: 1.5rem;
+                /* Further reduced for small screens */
             }
+
+            .countdown-label {
+                font-size: 0.7rem;
+            }
+
 
             #greeting-text {
                 font-size: 1.7rem;
@@ -949,7 +964,7 @@
             <div class="glitch-wrapper">
                 <div class="glitch-text">
                     <!-- Invisible spacer -->
-                    <span>Advance Happie Birthday Mah....! ❤️</span>
+                    <span>Advance Happiest Birthday Mah....! ❤️</span>
                 </div>
             </div>
         </div>
@@ -1385,7 +1400,7 @@
 
             setTimeout(() => {
                 // 3. Clear boxes and show wish
-                nameContainer.innerHTML = "Happy Birthday my Dear Thoongu Munchi!";
+                nameContainer.innerHTML = "Happy Birthday My Dear Thoongu Munchi!❤️";
 
                 // 4. Style the wish
                 nameContainer.style.fontFamily = "'Sacramento', cursive";
