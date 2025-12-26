@@ -9,7 +9,8 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;400;600&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700;900&display=swap"
         rel="stylesheet">
 
     <style>
@@ -456,6 +457,63 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
+        .advance-wish {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            /* Fixed readable small size */
+            font-weight: 900;
+            color: var(--neon-pink);
+            -webkit-text-stroke: 0.7px black;
+            text-shadow: 0 0 5px var(--neon-pink);
+            margin: 0;
+            /* Margin handled by container */
+            letter-spacing: 1px;
+            text-align: left;
+            /* Text must remain left-aligned for cursor to move right */
+
+            /* Typewriter properties */
+            overflow: hidden;
+            border-right: 3px solid var(--neon-pink);
+            white-space: nowrap;
+            width: 0;
+            animation:
+                typing 4s steps(34, end) 1s forwards,
+                blinkCursor 0.75s step-end infinite;
+            display: inline-block;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 34ch
+            }
+
+            /* Exact character width target */
+        }
+
+        @keyframes blinkCursor {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--neon-pink)
+            }
+        }
+
+
+        /* Container to center the inline-block typewriter */
+        .advance-wish-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
         .balloon::after {
             content: '▼';
             position: absolute;
@@ -727,134 +785,7 @@
             transform: translateY(-1px) scale(1.02);
         }
 
-        /* 
-         * ========================================
-         * GLITCH TYPEWRITER EFFECT
-         * ========================================
-         */
-        .glitch-wrapper {
-            margin-top: 40px;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 2s forwards;
-            /* 2s delay for "slowly" */
-            min-height: 40px;
-            display: flex;
-            justify-content: center;
-        }
 
-        .glitch-text {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-            position: relative;
-            display: inline-block;
-            letter-spacing: 2px;
-            text-shadow:
-                0 0 5px var(--neon-pink),
-                0 0 10px var(--neon-pink),
-                0 0 20px var(--neon-pink),
-                0 0 40px var(--neon-violet),
-                0 0 80px var(--neon-violet);
-        }
-
-        /* Typewriter Animation */
-        .glitch-text::before {
-            content: "Advance Happie Birthday Mah....! ❤️";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            overflow: hidden;
-            border-right: 2px solid var(--neon-violet);
-            color: #fff;
-            text-shadow:
-                0 0 5px var(--neon-pink),
-                0 0 10px var(--neon-pink),
-                0 0 20px var(--neon-pink),
-                0 0 40px var(--neon-violet),
-                0 0 80px var(--neon-violet);
-            animation: typing 3s steps(30, end) 2.5s forwards, blinkCursor 0.75s step-end infinite;
-            white-space: nowrap;
-        }
-
-        /* Glitch Animation Layer */
-        .glitch-text::after {
-            content: "Advance Happie Birthday Mah....! ❤️";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            overflow: hidden;
-            color: #fff;
-            opacity: 0.8;
-            animation: typing 3s steps(30, end) 2.5s forwards, glitch 1s infinite alternate-reverse;
-            text-shadow: -2px 0 red, 2px 0 blue;
-            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-            background: transparent;
-            white-space: nowrap;
-        }
-
-        /* Ensure the base text is hidden (hack to maintain layout width) */
-        .glitch-text span {
-            visibility: hidden;
-        }
-
-        @keyframes typing {
-            from {
-                width: 0
-            }
-
-            to {
-                width: 100%
-            }
-        }
-
-        @keyframes blinkCursor {
-
-            from,
-            to {
-                border-color: transparent
-            }
-
-            50% {
-                border-color: var(--neon-violet)
-            }
-        }
-
-        @keyframes glitch {
-            0% {
-                clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%);
-                transform: translate(2px, 0);
-            }
-
-            20% {
-                clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%);
-                transform: translate(-2px, 0);
-            }
-
-            40% {
-                clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%);
-                transform: translate(2px, 0);
-            }
-
-            60% {
-                clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%);
-                transform: translate(-2px, 0);
-            }
-
-            80% {
-                clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
-                transform: translate(10px, -5px);
-            }
-
-            100% {
-                clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
-                transform: translate(-2px, 0);
-            }
-        }
 
         /* 
          * ========================================
@@ -867,16 +798,12 @@
             }
 
             #countdown-timer {
-                font-size: 2rem;
-                /* Adjusted for full date string */
+                font-size: 11vw;
+                /* Responsive sizing for full date string */
             }
 
             .countdown-label {
                 font-size: 0.8rem;
-            }
-
-            .glitch-text {
-                font-size: 1rem;
             }
 
             #greeting-text {
@@ -912,17 +839,33 @@
             .card-back {
                 font-size: 0.9rem;
             }
+
+            .advance-wish {
+                font-size: 9px !important;
+                /* Critical: Must be small enough for 34ch to fit on 320px */
+                letter-spacing: 0px;
+                /* Remove spacing to save width */
+                margin-top: 10px;
+                -webkit-text-stroke: 0.3px black;
+                width: 100%;
+                /* Ensure container fit */
+                display: flex;
+                /* Helps with alignment in container */
+                justify-content: center;
+                /* Center the block itself */
+            }
         }
 
         @media (max-width: 400px) {
             #countdown-timer {
-                font-size: 1.5rem;
-                /* Further reduced for small screens */
+                font-size: 10vw;
+                /* Further adjustment for very small screens */
             }
 
             .countdown-label {
                 font-size: 0.7rem;
             }
+
 
 
             #greeting-text {
@@ -960,13 +903,12 @@
             <button id="enter-btn" class="btn" style="display: none; margin-top: 30px;" onclick="nextStage()">Enter to
                 Your 19th Year &rarr;</button>
 
-            <!-- Glitch Text Section -->
-            <div class="glitch-wrapper">
-                <div class="glitch-text">
-                    <!-- Invisible spacer -->
-                    <span>Advance Happiest Birthday Mah....! ❤️</span>
-                </div>
+            <!-- Advance Wish -->
+            <div class="advance-wish-container">
+                <div class="advance-wish">Advance Happiest Birthday Mah❤️</div>
             </div>
+
+
         </div>
     </div>
 
