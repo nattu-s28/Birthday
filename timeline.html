@@ -375,6 +375,122 @@
             h1 {
                 font-size: 2.5rem;
             }
+
+            /* Scale down the 3D card on really small screens if necessary */
+            .card {
+                transform: scale(0.9);
+                transform-origin: center left;
+                margin: 0 auto;
+            }
+        }
+
+        /* ----------------------------------------------------
+           NEW TRUNKS 3D CARD STYLES 
+           ---------------------------------------------------- */
+        .card {
+            width: 300px;
+            height: 455px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 36px;
+            perspective: 2500px;
+            cursor: pointer;
+            border-radius: 30px;
+            /* Ensure it fits in the timeline layout */
+            margin: 0 auto;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .wrapper {
+            transition: all 0.5s;
+            position: absolute;
+            width: 100%;
+            z-index: -1;
+            background: #000;
+            border-radius: 30px;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+        }
+
+        .wrapper img {
+            border-radius: 30px;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+        }
+
+        .card:hover .wrapper {
+            transform: perspective(900px) translateY(-5%) rotateX(25deg) translateZ(0);
+            box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+            -webkit-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 2px 35px 32px -8px rgba(0, 0, 0, 0.75);
+        }
+
+        .wrapper::before,
+        .wrapper::after {
+            content: "";
+            opacity: 0;
+            width: 100%;
+            height: 80px;
+            transition: all 0.5s;
+            border-radius: 30px;
+            position: absolute;
+            left: 0;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+        }
+
+        .wrapper::before {
+            top: 0;
+            height: 100%;
+            background-image: linear-gradient(to top, transparent 46%, rgba(12, 13, 19, 0.5) 68%, rgba(12, 13, 19) 97%);
+        }
+
+        .wrapper::after {
+            bottom: 0;
+            opacity: 1;
+            background-image: linear-gradient(to bottom, transparent 46%, rgba(12, 13, 19, 0.5) 68%, rgba(12, 13, 19) 97%);
+        }
+
+        .card:hover .wrapper::before,
+        .wrapper::after {
+            opacity: 1;
+        }
+
+        .card:hover .wrapper::after {
+            height: 120px;
+        }
+
+        .logo {
+            width: 100%;
+            transition: transform 0.5s;
+            position: absolute;
+            bottom: 10px;
+        }
+
+        .card:hover .logo {
+            transform: translate3d(0%, -50px, 100px);
+        }
+
+        .card:hover .cover-image {
+            opacity: 0.3;
+        }
+
+        .character {
+            width: 100%;
+            opacity: 0;
+            transition: all 0.5s;
+            filter: drop-shadow(2px 2px 2px #000);
+            position: absolute;
+            z-index: -1;
+        }
+
+        .card:hover .character {
+            opacity: 1;
+            transform: translate3d(5%, -20%, 670px);
         }
     </style>
 </head>
@@ -397,7 +513,7 @@
                             <div class="title">My Born Date</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/1.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -412,7 +528,7 @@
                             <div class="title">Her Born Date</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/2.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -429,7 +545,7 @@
                             <div class="description">(Failure)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/3.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -446,7 +562,7 @@
                             <div class="description">(Karnataka)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/4.jpg" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -461,7 +577,7 @@
                             <div class="title">Your most painfull day with me</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/5.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -477,7 +593,7 @@
                             <div class="description">(Most Happiest Day in my life)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/6.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -494,7 +610,7 @@
                             <div class="description">(Proposed in Mobile)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/7.jpg" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -510,7 +626,7 @@
                             <div class="description">(Proposed in Classroom)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/8.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -525,7 +641,7 @@
                             <div class="title">Our First kiss in your forehead</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/9.jpg" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -540,7 +656,7 @@
                             <div class="title">I Gave the First flower from me</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/10.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -555,7 +671,7 @@
                             <div class="title">Our My first Peace In your Lap</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/11.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -570,7 +686,7 @@
                             <div class="title">Our First Hug</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/12.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -586,22 +702,7 @@
                             <div class="description">(4:53:39)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="date">13.03.2024</div>
-                            <div class="title">Our letter Caught by your mom</div>
-                        </div>
-                        <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/13.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -616,7 +717,7 @@
                             <div class="title">Our First Travel</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/14.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -627,11 +728,12 @@
                 <div class="timeline-content">
                     <div class="content-inner">
                         <div class="content-front">
-                            <div class="date">19.10.2024</div>
-                            <div class="title">Most Painfull Day by me</div>
+                            <div class="date">09/24 - Till Now</div>
+                            <div class="title">Painful Days</div>
+                            <div class="description">Sorry For Everthing..!</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/15.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -646,13 +748,12 @@
                             <div class="title">Most painful birthday of yours to me</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/16.png" alt="Memory">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2025 -->
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
                 <div class="timeline-content">
@@ -663,7 +764,7 @@
                             <div class="description">(Never felt this pain)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/17.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -679,7 +780,7 @@
                             <div class="description">(Now it destroyed that by your friends)</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/18.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -695,7 +796,7 @@
                             <div class="description">and told my mistake</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/19.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -710,23 +811,7 @@
                             <div class="title">My Visit for see you in your temple Festival</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="date">04.05.2025</div>
-                            <div class="title">You told the Hope Word</div>
-                            <div class="description">(Enaku Nerya time venum)</div>
-                        </div>
-                        <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/20.jpg" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -742,39 +827,7 @@
                             <div class="description">without you knowing me.</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="date">30.06.2025</div>
-                            <div class="title">You Came again for my studies</div>
-                            <div class="description">with lot of pain.</div>
-                        </div>
-                        <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="date">20.07.2025</div>
-                            <div class="title">I realished you are talking with me with the inside pain</div>
-                            <div class="description">without expressing anything for me an I told you to go.</div>
-                        </div>
-                        <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/21.jpg" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -790,7 +843,7 @@
                             <div class="description">and talked 12.13 minites</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/22.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -805,7 +858,7 @@
                             <div class="title">Visit for see you in Diwali in rain</div>
                         </div>
                         <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
+                            <img src="images/23.png" alt="Memory">
                         </div>
                     </div>
                 </div>
@@ -813,18 +866,18 @@
 
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="date">28.12.2025</div>
-                            <div class="title">Your Birthday</div>
-                            <div class="description">I Very Happie with lot of happiness and hope come again into my
-                                life I still wating with lots of love on you.</div>
-                        </div>
-                        <div class="content-back">
-                            <img src="images/placeholder.jpg" alt="Memory">
-                        </div>
+                <!-- Special 3D Trunks Card -->
+                <div class="card">
+                    <!-- Cover image Code -->
+                    <div class="wrapper">
+                        <img src="images/l1.png" class="cover-image" alt="Cover" />
                     </div>
+
+                    <!-- Logo Code -->
+                    <img src="images/l3.png" class="logo" alt="Dragon Ball Z" />
+
+                    <!-- Character image Code -->
+                    <img src="images/l2.png" class="character" alt="Trunks" />
                 </div>
             </div>
         </div>
