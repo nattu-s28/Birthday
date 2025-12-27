@@ -700,63 +700,9 @@
 
         /* 
          * ========================================
-         * STAGE 5: MESSAGE & GIFT
+         * STAGE 5: GIFT
          * ========================================
          */
-        .message-card {
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            margin: 0 auto 20px;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
-
-        .message-card.opened .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front,
-        .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .card-front {
-            background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
-            color: white;
-            font-family: 'Sacramento', cursive;
-            font-size: 2.5rem;
-        }
-
-        .card-back {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            color: var(--text-silver);
-            transform: rotateY(180deg);
-            font-size: 1rem;
-            line-height: 1.6;
-            overflow-y: auto;
-        }
-
-        #message-next-btn {
-            display: none;
-        }
 
         #gift-section {
             text-align: center;
@@ -891,22 +837,9 @@
                 font-size: 1.7rem;
             }
 
-            .card-stack {
-                width: 240px;
-                height: 300px;
-            }
-
             .btn {
                 padding: 12px 28px;
                 font-size: 1rem;
-            }
-
-            .card-front {
-                font-size: 2rem;
-            }
-
-            .card-back {
-                font-size: 0.9rem;
             }
 
             .advance-wish {
@@ -946,10 +879,7 @@
                 width: 180px;
             }
 
-            .card-stack {
-                width: 200px;
-                height: 260px;
-            }
+
         }
     </style>
 </head>
@@ -975,6 +905,10 @@
             <div class="advance-wish-container">
                 <div class="advance-wish">Advance Happiest Birthday Mah❤️</div>
             </div>
+
+            <!-- Emergency Enter Button -->
+            <button class="btn" style="margin-top: 50px; opacity: 0.6; font-size: 0.8rem;"
+                onclick="nextStage()">Emergency Enter 🚨</button>
 
         </div>
     </div>
@@ -1012,31 +946,10 @@
     </div>
 
     <!-- ========================================
-         STAGE 5: MESSAGE & GIFT
+         STAGE 5: GIFT
          ======================================== -->
     <div id="final-stage" class="stage">
-        <div class="message-card" id="message-card" onclick="openCard()">
-            <div class="card-inner">
-                <div class="card-front">
-                    Tap to Open
-                </div>
-                <div class="card-back">
-                    <p>
-                        Happy Birthday, my dearest! 🎉<br><br>
-                        On this special day, I want you to know how much you mean to me.
-                        Your smile lights up my world, and your kindness inspires me every day.
-                        May this year bring you endless joy, amazing adventures, and all the
-                        love you deserve. Here's to another year of wonderful memories together!
-                        <br><br>
-                        With all my love,<br>
-                        Always ❤️
-                    </p>
-                </div>
-            </div>
-        </div>
-        <button class="btn" id="message-next-btn" onclick="showGift()">Next &rarr;</button>
-
-        <div id="gift-section" style="display: none;">
+        <div id="gift-section">
             <p>Tap the gift!</p>
             <img src="images/gift.png" alt="Gift Box" id="gift-box" onclick="openGift()">
         </div>
@@ -1545,7 +1458,7 @@
 
                 // Add a proceed button
                 const btn = document.getElementById('cake-btn');
-                btn.textContent = "Read My Letter →";
+                btn.textContent = "Open your Gift →";
                 btn.style.display = 'inline-block';
                 btn.style.marginTop = "30px";
                 btn.disabled = false; // Re-enable the button
@@ -1567,26 +1480,9 @@
 
         /* 
          * ----------------------------------------
-         * STAGE 5: Message Card & Gift
+         * STAGE 5: Gift
          * ----------------------------------------
          */
-        function openCard() {
-            const card = document.getElementById('message-card');
-            if (!card.classList.contains('opened')) {
-                card.classList.add('opened');
-                card.onclick = null;
-                setTimeout(() => {
-                    document.getElementById('message-next-btn').style.display = 'inline-block';
-                }, 1000);
-            }
-        }
-
-        function showGift() {
-            document.querySelector('.message-card').style.display = 'none';
-            document.getElementById('message-next-btn').style.display = 'none';
-            document.getElementById('gift-section').style.display = 'block';
-        }
-
         function openGift() {
             // Massive confetti explosion
             for (let i = 0; i < 150; i++) {
