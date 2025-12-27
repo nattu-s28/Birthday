@@ -215,6 +215,194 @@
                 line-height: 1.6;
             }
         }
+
+        /* Gift Message Box */
+        .gift-box {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255, 20, 147, 0.1);
+            border: 2px solid var(--neon-pink);
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .gift-box.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gift-box h2 {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.5rem;
+            color: var(--text-gold);
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .gift-icon {
+            font-size: 4rem;
+            margin: 20px 0;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .gift-message {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.4);
+            min-height: 2rem;
+        }
+
+        /* Typewriter effect for gift message */
+        .gift-message.typing {
+            border-right: 3px solid var(--neon-pink);
+            animation: blinkCursor 0.75s step-end infinite;
+            display: inline-block;
+        }
+
+        .gift-message.static {
+            border-right: none;
+            animation: none;
+        }
+
+        @media (max-width: 600px) {
+            .gift-box {
+                padding: 20px;
+                margin-top: 30px;
+            }
+
+            .gift-box h2 {
+                font-size: 2rem;
+            }
+
+            .gift-icon {
+                font-size: 3rem;
+            }
+
+            .gift-message {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Locked Button */
+        .locked-button-container {
+            margin-top: 50px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .locked-button-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .locked-btn {
+            display: inline-block;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #666, #999);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: not-allowed;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .locked-btn.unlocked {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+        }
+
+        .locked-btn.unlocked:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.6);
+        }
+
+        .lock-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            display: inline-block;
+            animation: lockShake 2s ease-in-out infinite;
+        }
+
+        @keyframes lockShake {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                transform: rotate(10deg);
+            }
+        }
+
+        .unlocked .lock-icon {
+            animation: unlockBounce 0.6s ease-out;
+        }
+
+        @keyframes unlockBounce {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.3) rotate(20deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .countdown-text {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: var(--text-silver);
+        }
+
+        @media (max-width: 600px) {
+            .locked-btn {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+
+            .lock-icon {
+                font-size: 1.3rem;
+            }
+
+            .countdown-text {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 
@@ -223,44 +411,29 @@
     <audio id="wish-audio" src="Audio/Song3.mpeg" loop preload="auto"></audio>
 
     <div class="container">
-        <h1>My Wish</h1>
+        <h1>My Wish🌍</h1>
         <div id="wishContent" class="wish-content typing"></div>
+
+        <!-- Gift Message Box -->
+        <div class="gift-box" id="giftBox">
+            <h2>My Gifts</h2>
+            <div class="gift-icon">🎁</div>
+            <div class="gift-message typing" id="giftMessage"></div>
+        </div>
+
+        <!-- Locked Button -->
+        <div class="locked-button-container">
+            <a href="letter.html" id="letterBtn" class="locked-btn">
+                <span class="lock-icon" id="lockIcon">🔒</span>
+                <span id="btnText">Locked</span>
+            </a>
+            <span class="countdown-text" id="countdownText">Unlocks in: Calculating...</span>
+        </div>
     </div>
 
     <script>
         // The complete message to display
-        const WISH_MESSAGE = `📈𝐋𝖎𝐟ꫀ 𝐃ꪖ𝖎𝚛𝖎ꫀ𝘀 𝐖𝖎𝐭𝚑 𝐇ᴇʀ📉
-
-𝟐𝟕.𝟎𝟗.𝟐𝟎𝟎𝟔 - My born Date
-𝟐𝟖.𝟏𝟐.𝟐𝟎𝟎𝟔 - Her Born Date
-𝟏𝟑.𝟏𝟏.𝟐𝟎𝟐𝟏 - First Step of Our Love(Failure)
-𝟐𝟎.𝟏𝟐.𝟐𝟎𝟐𝟐 - Our First Train Travel(Karnataka)
-𝟐𝟕.𝟏𝟐.𝟐𝟎𝟐𝟐 - your most painfull day with me
-𝟐𝟖.𝟏𝟐.𝟐𝟎𝟐𝟐 - Your First birthday with me(Most Happiest Day in my life)
-𝟏𝟑.𝟎𝟏.𝟐𝟎𝟐𝟒 - Our Love Success Date(Proposed in Mobile)
-𝟐𝟐.𝟎𝟏.𝟐𝟎𝟐𝟒 - Our Love Success Date(Proposed in Classroom)
-𝟎𝟕.𝟎𝟐.𝟐𝟎𝟐𝟒 - Our First kiss in your forehead
-𝟏𝟒.𝟎𝟐.𝟐𝟎𝟐𝟒 - I Gave the First flower from me
-𝟏𝟔.𝟎𝟐.𝟐𝟎𝟐𝟒 - Our My first Peace In your Lap
-𝟏𝟕.𝟎𝟐.𝟐𝟎𝟐𝟒 - Our First Hug
-05.03.2024 - Our First Longest Call (4:53:39)
-𝟏𝟑.𝟎𝟑.𝟐𝟎𝟐𝟒 - Our letter Caught by your mom
-𝟏𝟏.𝟎𝟔.𝟐𝟎𝟐𝟒 - Our First Travel
-𝟏𝟗.𝟏𝟎.𝟐𝟎𝟐𝟒 - Most Painfull Day by me
-𝟐𝟖.𝟏𝟐.𝟐𝟎𝟐𝟒 - Most painful birthday of yours to me
-𝟏𝟑.𝟎𝟏.𝟐𝟎𝟐𝟓 - Your First Cry Heard by me(Never felt this pain)
-𝟏𝟑.𝟎𝟐.𝟐𝟎𝟐𝟓 - My last Hope by letter(Now it destroyed that by your friends)
-𝟏𝟑.𝟎𝟒.𝟐𝟎𝟐𝟓 - Unexpected Call from you to and told my mistake
-𝟎𝟏.𝟎𝟓.𝟐𝟎𝟐𝟓 - My Visit for see you in your temple Festival
-𝟎𝟒.𝟎𝟓.𝟐𝟎𝟐𝟓 - You told the Hope Word (Enaku Nerya time venum)
-𝟏𝟏.𝟎𝟓.𝟐𝟎𝟐𝟓 - Veerapandi festival with you without you knowing me.
-30.06.2025 - You Came again for my studies with lot of pain.
-20.07.2025 - I realished you are talking with me with the inside pain without expressing anything for me an I told you to go.
-27.09.2025 - you called me for my birthday unexpected and talked 12.13 minites
-20.10.2025 - Visit for see you in Diwali in rain 
-28.12.2025 - Your Birthday I Very Happie with lot of happiness and hope come again into my life I still wating with lots of love on you.
-
-YESTERDAY - TODAY - TOMMOROW every time im here for only you`;
+        const WISH_MESSAGE = `Wish  you  a  Very  Most  Happiest  Birthday  My  Dear...!🌍💎 Un Pera  Engaum  Use  Panna  kudathunu  Sollita😁 Paravalla  Adhu  namma  Nallathukuthan.  Inaiku  Unaku  Speacialoo  Ilayoo  Enaku  Romba  Romba  Speacial  Day  Mah🥳. Inaiku  Unnavida  Nan  Romba  Happppiyaaa  Iruken🥳 Manasula  Evlo  Kastam  irunthalum  Ellathaum  Inaiku  Maranthutu  Happiya  Unaku  Pudichatha  Senjutu  Happiya  iru  Mah💯❤️‍🩹Nee  Epti  Irukanu  Enaku  Thriyala  Nalla  Irupenu  Namburen🖤 Mah  Pathu  Inaikoda  68  days  achu  Mah...!🙃 Today  Is  your  very  Speacial  Day  Mah🎉  Epoumee  Sirichutee  Irumahh..🥰  Epoumee  Happiya  Irumah..🥹 Epoum  Sandosama  Iru..🙃  Epoum  Nimathiya  Iru..❤️ Enna  Vittu  Nee  Thoorama  Irunthalum  Thenamum  Ilanalum  Un  Nyabgathuku  Epovachum  varuvenu  Namburen..🤗 Nee  Enoda  Bday  Call  Panna  Maari  Nanum  Unaku  En  Vayala  Wish  Pannaum  nu  Aasai  Paduren😇Unaku  Thrium  Nee  Pesuna  Nan  Happiya  Irupenu  adhunala  Anaiku  Enaku  Happiness  Kudutha  Call  Panni🥹 Ana  Unaku  Eptinu  Thriyala  Unna  Compalee  Edumee  Pannala  Unaku  Pudichuruntha  Mattum  Enaku  Call  Pannu  Mah❤️💯 Nee  Call  Pannalum  Pannalanalum  Edhum  Feel  Panna  Maten💯. Beacuse  Today  is  Your  Speacial  Day  Enakum🥳 Mah  Epoum  Pola  tha  Un  Manasuku  Edhu  Serinu  Paduthoo  Adha  Sei...💯🖤Enkitta  Pesa  varthaigal  Evolovo  Iruku🙂Ellathaum  Textla  Express  pannavo  Pesavoo  Mudiyathu  Aprom  Inaiku  edhuvum  Pesavum  Theva  Ila🫂 Mahhh  Once  Again  Happiest  Birthday  Mahh...!💕🎊🎉 Stay  Blessed🥹 and  Live  Happie  Forever💯Epovachum  Lonely  a  Feel  Panena  Kavalyee  Padatha  Epoumeee...💫❤️‍🩹Varthaiku  Ila  Epoumee  Unakaga  Oru  Jeevan  kathutu Irukum🖤Miss You Lots...!🖤Stay Happy Mahh...!🥹🫂`;
 
         const wishContentElement = document.getElementById('wishContent');
         const TYPING_DURATION = 36000; // 36 seconds in milliseconds
@@ -317,7 +490,7 @@ YESTERDAY - TODAY - TOMMOROW every time im here for only you`;
             }, 100);
         }
 
-        // Typewriter function
+        // Typewriter function for wish message
         function typeWriter() {
             if (currentIndex < totalChars) {
                 wishContentElement.textContent = WISH_MESSAGE.substring(0, currentIndex + 1);
@@ -327,11 +500,108 @@ YESTERDAY - TODAY - TOMMOROW every time im here for only you`;
                 // Typing complete - switch to static display
                 wishContentElement.classList.remove('typing');
                 wishContentElement.classList.add('static');
+
+                // Reveal gift box after a short delay
+                setTimeout(() => {
+                    revealGiftBox();
+                }, 1000);
             }
+        }
+
+        // Function to reveal gift box and start typing gift message
+        function revealGiftBox() {
+            const giftBox = document.getElementById('giftBox');
+            const giftMessageElement = document.getElementById('giftMessage');
+
+            // Show the gift box with animation
+            giftBox.classList.add('visible');
+
+            // Start typing gift message after box is visible
+            setTimeout(() => {
+                typeGiftMessage();
+            }, 800);
+        }
+
+        // Typewriter function for gift message
+        function typeGiftMessage() {
+            const GIFT_MESSAGE = "Mah Endha Website En Anboda Unakaga Pathu Pathu Pannikuren Unaku Eptina Pudikuma Pudikathanu Pathu Pathu Pannen Oru Velai Endha Website Engayachum Una Hurt Panniruntha Enna Mannichuru Mah Nan Venum nu Pannala Mostly Secure a Panniruken nee Edhukum Bayapuda Vendam Edhu Enoda Anbana Visual Gift edhu Unaku Pudikum nu Namburen Oru Velai Pudikalana...Vitru Mah❤️🥰.Mah Ennoda Happiness Kaga Unakaga Enoda Anboda Nan Sila Hand Made Gifts Panni Vachruken Adhu Epo Enta Ila Gokul ta Iruku Unakaga adhuta Kuduthuruken Adha Poi Kandipa Kuduka Vendam nu Solliten Nee Poii Adha Vangikoo Mahh Unaku Adhu Pudikumanu Thriyala Ana Enaku Adhu Oru Chinna Sandosam Mah Unna Compale lam Pannala Mah Nan Ini Epoumee Edhukagavum Unna Compale Panna Maten Unaku Istam Iruntha Mattum Mah Kandipa Unaku Istam Iruntha Mattum Vangiko.En Pecha Keppanu Namburen Pudikatha edum Seiyatha Mah..ilana Onula Mah Nan Kavala Pada maten Unmaiya.. Nan Thriumba Pongaluku Varumothu Vangitu Poi Batrama Vachukuren Unakaga❤️💕Miss you🖤Take Care Mah❤️🥰";
+            const giftMessageElement = document.getElementById('giftMessage');
+            let giftIndex = 0;
+            const giftCharDelay = 100; // 100ms per character
+
+            function typeGift() {
+                if (giftIndex < GIFT_MESSAGE.length) {
+                    giftMessageElement.textContent = GIFT_MESSAGE.substring(0, giftIndex + 1);
+                    giftIndex++;
+                    setTimeout(typeGift, giftCharDelay);
+                } else {
+                    // Typing complete - remove cursor
+                    giftMessageElement.classList.remove('typing');
+                    giftMessageElement.classList.add('static');
+
+                    // Reveal locked button after a short delay
+                    setTimeout(() => {
+                        revealLockedButton();
+                    }, 1000);
+                }
+            }
+
+            typeGift();
+        }
+
+        // Function to reveal the locked button
+        function revealLockedButton() {
+            const lockedButtonContainer = document.querySelector('.locked-button-container');
+            lockedButtonContainer.classList.add('visible');
         }
 
         // Start typing effect
         typeWriter();
+
+        // Countdown Timer for Locked Button
+        const letterBtn = document.getElementById('letterBtn');
+        const lockIcon = document.getElementById('lockIcon');
+        const btnText = document.getElementById('btnText');
+        const countdownText = document.getElementById('countdownText');
+
+        // Target date: December 29, 2025 00:00:00
+        const unlockDate = new Date('December 29, 2025 00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = unlockDate - now;
+
+            if (distance < 0) {
+                // Unlock the button
+                letterBtn.classList.add('unlocked');
+                letterBtn.style.pointerEvents = 'auto';
+                lockIcon.textContent = '🔓';
+                btnText.textContent = 'Open My Letter';
+                countdownText.textContent = 'Unlocked! Click to read';
+                clearInterval(countdownInterval);
+                return;
+            }
+
+            // Calculate time remaining
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update countdown display
+            countdownText.textContent = `Unlocks in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        // Update countdown every second
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+
+        // Prevent clicking locked button
+        letterBtn.addEventListener('click', function (e) {
+            if (!letterBtn.classList.contains('unlocked')) {
+                e.preventDefault();
+            }
+        });
     </script>
 
 </body>

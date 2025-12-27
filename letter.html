@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Letter</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Sacramento&family=Dancing+Script:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Cosmic Theme Variables */
+        :root {
+            --bg-dark: #0a0014;
+            --bg-violet: #1a0033;
+            --neon-pink: #ff1493;
+            --neon-violet: #9d4edd;
+            --text-silver: #e0e0e0;
+            --text-pink: #ffc0cb;
+            --text-gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at 50% 50%, var(--bg-violet) 0%, var(--bg-dark) 100%);
+            color: var(--text-silver);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Starfield Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .letter-container {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 240, 245, 0.95));
+            border-radius: 15px;
+            padding: 50px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3rem;
+            color: var(--neon-pink);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .letter-content {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            line-height: 2;
+            color: #333;
+            white-space: pre-line;
+            text-align: left;
+        }
+
+        .signature {
+            margin-top: 40px;
+            text-align: right;
+            font-family: 'Sacramento', cursive;
+            font-size: 2rem;
+            color: var(--neon-pink);
+        }
+
+        @media (max-width: 600px) {
+            .letter-container {
+                padding: 30px 25px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .letter-content {
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+
+            .signature {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Letter Audio -->
+    <audio id="letter-audio" src="Audio/Song3.mpeg" loop preload="auto"></audio>
+
+    <div class="letter-container">
+        <h1>💌 My Letter to You 💌</h1>
+        <div class="letter-content">
+            Dear Mah,
+
+            This is a special letter just for you...
+
+            [Your letter content will go here]
+
+        </div>
+        <div class="signature">
+            With Love,
+            Your Special Person ❤️
+        </div>
+    </div>
+
+    <script>
+        // Audio playback management
+        const letterAudio = document.getElementById('letter-audio');
+        let audioStarted = false;
+
+        function startAudio() {
+            if (!audioStarted && letterAudio) {
+                letterAudio.play()
+                    .then(() => {
+                        audioStarted = true;
+                        console.log('Audio playing successfully');
+                    })
+                    .catch(err => {
+                        console.log('Audio play failed:', err);
+                    });
+            }
+        }
+
+        const events = ['click', 'touchstart', 'touchend', 'scroll', 'keydown', 'mousemove'];
+
+        events.forEach(event => {
+            document.addEventListener(event, function handler() {
+                startAudio();
+                if (audioStarted) {
+                    events.forEach(e => {
+                        document.removeEventListener(e, handler);
+                    });
+                }
+            }, { passive: true });
+        });
+
+        if (letterAudio) {
+            setTimeout(() => {
+                letterAudio.play()
+                    .then(() => {
+                        audioStarted = true;
+                        console.log('Autoplay successful');
+                    })
+                    .catch(err => {
+                        console.log('Autoplay blocked, waiting for user interaction');
+                    });
+            }, 100);
+        }
+    </script>
+
+</body>
+
+</html>

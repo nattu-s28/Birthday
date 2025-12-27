@@ -179,7 +179,7 @@
          * ========================================
          */
         #greeting-stage img {
-            width: 150px;
+            width: 200px;
             height: auto;
             margin-bottom: 30px;
             animation: bounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -917,7 +917,7 @@
         <img src="images/Her.png" alt="Cute character">
         <h2 id="greeting-text"></h2>
         <p>Yes, it's YOU! A little surprise awaits...</p>
-        <button class="btn" onclick="nextStage()">Start the surprise &rarr;</button>
+        <button class="btn" onclick="nextStage()">Let's Start&rarr;</button>
     </div>
 
     <!-- ========================================
@@ -938,7 +938,7 @@
         <div id="name-container" class="name-reveal-container"></div>
 
         <div style="margin-top: 20px;">
-            <button class="btn" id="cake-btn">Decorate 🎉</button>
+            <button class="btn" id="cake-btn">Decorate🎉</button>
         </div>
     </div>
 
@@ -954,7 +954,7 @@
 
     <!-- Final Overlay -->
     <div class="final-overlay" id="final-overlay">
-        <h2>Happy Birthday! 🎊</h2>
+        <h2>Happy Birthday Mah!❤️</h2>
         <p style="font-size: 1.2rem; margin-bottom: 30px; color: var(--text-silver);">
             Hope you loved your surprise!
         </p>
@@ -1104,8 +1104,8 @@
                 lightCandle(cakeContainer);
                 blastConfetti(decorContainer); // Small extra burst
 
-                message.textContent = 'Blow the candle to make a wish! 🌬️';
-                btn.textContent = 'Tap to Blow 🌬️';
+                message.textContent = 'Blow the candle to make a wish!🌬️';
+                btn.textContent = 'Tap to Blow🌬️';
 
                 cakeStep = 3;
             } else if (cakeStep === 3) {
@@ -1115,7 +1115,7 @@
                 // Step 4: Create Balloons
                 createBalloons();
                 btn.style.display = 'none';
-                message.textContent = 'Pop all the balloons!';
+                message.textContent = 'Pop the all balloons!';
             }
         }
 
@@ -1129,7 +1129,7 @@
             }
 
             const message = document.getElementById('cake-message');
-            message.textContent = 'Yay! Wish made! ✨';
+            message.textContent = 'Yay! Your Wish made!✨';
 
             const btn = document.getElementById('cake-btn');
             btn.textContent = 'Pop the Balloons →';
