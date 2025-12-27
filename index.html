@@ -1047,6 +1047,12 @@
 
                     enterBtn.style.display = 'inline-block';
                     clearInterval(countdownInterval);
+                    // 🔴 STOP MUSIC WHEN COUNTDOWN ENDS
+                    const audio = document.getElementById('countdown-audio');
+                    if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
                     return;
                 }
 
@@ -1470,6 +1476,29 @@
         document.addEventListener('click', enableAudioOnFirstInteraction, { once: true });
         document.addEventListener('scroll', enableAudioOnFirstInteraction, { once: true });
         document.addEventListener('touchstart', enableAudioOnFirstInteraction, { once: true });
+
+
+        /* ========================================
+        MOBILE SAFE AUDIO START
+        ======================================== */
+
+        function unlockAudioForMobile() {
+            const audio = document.getElementById('countdown-audio');
+            if (!audio) return;
+
+            audio.muted = false;   // allow sound
+            audio.volume = 1.0;
+
+            audio.play().catch(() => {});
+
+            document.removeEventListener('touchstart', unlockAudioForMobile);
+            document.removeEventListener('click', unlockAudioForMobile);
+        }
+
+        // MOBILE NEEDS TOUCH
+        document.addEventListener('touchstart', unlockAudioForMobile, { once: true });
+        document.addEventListener('click', unlockAudioForMobile, { once: true });
+
 
     </script>
 
