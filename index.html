@@ -1474,12 +1474,7 @@
                     playPromise.then(() => {
                         // success
                         if (musicBtn) {
-                            musicBtn.textContent = "🔇 Stop Music";
-                            musicBtn.style.animation = 'none';
-                            // If we want to hide it automatically:
-                            // musicBtn.style.display = 'none'; 
-                            // But keeping it visible as a toggle is better UX
-                            musicBtn.style.display = 'block';
+                            musicBtn.style.display = 'none';
                         }
 
                         // Remove listeners once successful
