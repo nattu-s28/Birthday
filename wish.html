@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wish</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Sacramento&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Cosmic Theme Variables */
+        :root {
+            --bg-dark: #0a0014;
+            --bg-violet: #1a0033;
+            --neon-pink: #ff1493;
+            --neon-violet: #9d4edd;
+            --text-silver: #e0e0e0;
+            --text-pink: #ffc0cb;
+            --text-gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at 50% 50%, var(--bg-violet) 0%, var(--bg-dark) 100%);
+            color: var(--text-silver);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Starfield Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            width: 100%;
+            background: rgba(26, 0, 51, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid var(--neon-violet);
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.4);
+            padding: 50px 40px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Custom scrollbar for container */
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: var(--neon-violet);
+            border-radius: 10px;
+        }
+
+        .container::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-pink);
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3.5rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .wish-content {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-silver);
+            white-space: pre-line;
+            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* Typewriter effect */
+        .wish-content.typing {
+            overflow: hidden;
+            border-right: 3px solid var(--neon-pink);
+            animation: blinkCursor 0.75s step-end infinite;
+        }
+
+        /* Static display with subtle glow */
+        .wish-content.static {
+            border-right: none;
+            animation: none;
+            text-shadow: 0 0 8px rgba(224, 224, 224, 0.3);
+        }
+
+        @keyframes blinkCursor {
+
+            from,
+            to {
+                border-color: transparent;
+            }
+
+            50% {
+                border-color: var(--neon-pink);
+            }
+        }
+
+        /* Highlight important dates */
+        .wish-content strong {
+            color: var(--text-gold);
+            font-weight: 600;
+        }
+
+        /* Final line styling */
+        .final-line {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px dashed var(--neon-violet);
+            font-size: 1.3rem;
+            color: var(--neon-pink);
+            text-align: center;
+            font-weight: 600;
+            text-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+                align-items: flex-start;
+            }
+
+            .container {
+                padding: 25px 20px;
+                max-height: 85vh;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 25px;
+            }
+
+            .wish-content {
+                font-size: 0.85rem;
+                line-height: 1.7;
+            }
+
+            .final-line {
+                font-size: 0.95rem;
+                margin-top: 20px;
+                padding-top: 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .wish-content {
+                font-size: 0.8rem;
+                line-height: 1.6;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Wish Audio -->
+    <audio id="wish-audio" src="Audio/Song3.mpeg" loop preload="auto"></audio>
+
+    <div class="container">
+        <h1>My Wish</h1>
+        <div id="wishContent" class="wish-content typing"></div>
+    </div>
+
+    <script>
+        // The complete message to display
+        const WISH_MESSAGE = `📈𝐋𝖎𝐟ꫀ 𝐃ꪖ𝖎𝚛𝖎ꫀ𝘀 𝐖𝖎𝐭𝚑 𝐇ᴇʀ📉
+
+𝟐𝟕.𝟎𝟗.𝟐𝟎𝟎𝟔 - My born Date
+𝟐𝟖.𝟏𝟐.𝟐𝟎𝟎𝟔 - Her Born Date
+𝟏𝟑.𝟏𝟏.𝟐𝟎𝟐𝟏 - First Step of Our Love(Failure)
+𝟐𝟎.𝟏𝟐.𝟐𝟎𝟐𝟐 - Our First Train Travel(Karnataka)
+𝟐𝟕.𝟏𝟐.𝟐𝟎𝟐𝟐 - your most painfull day with me
+𝟐𝟖.𝟏𝟐.𝟐𝟎𝟐𝟐 - Your First birthday with me(Most Happiest Day in my life)
+𝟏𝟑.𝟎𝟏.𝟐𝟎𝟐𝟒 - Our Love Success Date(Proposed in Mobile)
+𝟐𝟐.𝟎𝟏.𝟐𝟎𝟐𝟒 - Our Love Success Date(Proposed in Classroom)
+𝟎𝟕.𝟎𝟐.𝟐𝟎𝟐𝟒 - Our First kiss in your forehead
+𝟏𝟒.𝟎𝟐.𝟐𝟎𝟐𝟒 - I Gave the First flower from me
+𝟏𝟔.𝟎𝟐.𝟐𝟎𝟐𝟒 - Our My first Peace In your Lap
+𝟏𝟕.𝟎𝟐.𝟐𝟎𝟐𝟒 - Our First Hug
+05.03.2024 - Our First Longest Call (4:53:39)
+𝟏𝟑.𝟎𝟑.𝟐𝟎𝟐𝟒 - Our letter Caught by your mom
+𝟏𝟏.𝟎𝟔.𝟐𝟎𝟐𝟒 - Our First Travel
+𝟏𝟗.𝟏𝟎.𝟐𝟎𝟐𝟒 - Most Painfull Day by me
+𝟐𝟖.𝟏𝟐.𝟐𝟎𝟐𝟒 - Most painful birthday of yours to me
+𝟏𝟑.𝟎𝟏.𝟐𝟎𝟐𝟓 - Your First Cry Heard by me(Never felt this pain)
+𝟏𝟑.𝟎𝟐.𝟐𝟎𝟐𝟓 - My last Hope by letter(Now it destroyed that by your friends)
+𝟏𝟑.𝟎𝟒.𝟐𝟎𝟐𝟓 - Unexpected Call from you to and told my mistake
+𝟎𝟏.𝟎𝟓.𝟐𝟎𝟐𝟓 - My Visit for see you in your temple Festival
+𝟎𝟒.𝟎𝟓.𝟐𝟎𝟐𝟓 - You told the Hope Word (Enaku Nerya time venum)
+𝟏𝟏.𝟎𝟓.𝟐𝟎𝟐𝟓 - Veerapandi festival with you without you knowing me.
+30.06.2025 - You Came again for my studies with lot of pain.
+20.07.2025 - I realished you are talking with me with the inside pain without expressing anything for me an I told you to go.
+27.09.2025 - you called me for my birthday unexpected and talked 12.13 minites
+20.10.2025 - Visit for see you in Diwali in rain 
+28.12.2025 - Your Birthday I Very Happie with lot of happiness and hope come again into my life I still wating with lots of love on you.
+
+YESTERDAY - TODAY - TOMMOROW every time im here for only you`;
+
+        const wishContentElement = document.getElementById('wishContent');
+        const TYPING_DURATION = 36000; // 36 seconds in milliseconds
+
+        let currentIndex = 0;
+        const totalChars = WISH_MESSAGE.length;
+        const charDelay = TYPING_DURATION / totalChars; // Calculate delay per character
+
+        // Audio playback management
+        const wishAudio = document.getElementById('wish-audio');
+        let audioStarted = false;
+
+        // Function to start audio
+        function startAudio() {
+            if (!audioStarted && wishAudio) {
+                wishAudio.play()
+                    .then(() => {
+                        audioStarted = true;
+                        console.log('Audio playing successfully');
+                    })
+                    .catch(err => {
+                        console.log('Audio play failed:', err);
+                    });
+            }
+        }
+
+        // Add multiple event listeners for better mobile support
+        const events = ['click', 'touchstart', 'touchend', 'scroll', 'keydown', 'mousemove'];
+
+        events.forEach(event => {
+            document.addEventListener(event, function handler() {
+                startAudio();
+                // Remove all event listeners after first successful interaction
+                if (audioStarted) {
+                    events.forEach(e => {
+                        document.removeEventListener(e, handler);
+                    });
+                }
+            }, { passive: true });
+        });
+
+        // Try to autoplay (will work on some browsers/devices)
+        if (wishAudio) {
+            // Small delay to ensure page is loaded
+            setTimeout(() => {
+                wishAudio.play()
+                    .then(() => {
+                        audioStarted = true;
+                        console.log('Autoplay successful');
+                    })
+                    .catch(err => {
+                        console.log('Autoplay blocked, waiting for user interaction');
+                    });
+            }, 100);
+        }
+
+        // Typewriter function
+        function typeWriter() {
+            if (currentIndex < totalChars) {
+                wishContentElement.textContent = WISH_MESSAGE.substring(0, currentIndex + 1);
+                currentIndex++;
+                setTimeout(typeWriter, charDelay);
+            } else {
+                // Typing complete - switch to static display
+                wishContentElement.classList.remove('typing');
+                wishContentElement.classList.add('static');
+            }
+        }
+
+        // Start typing effect
+        typeWriter();
+    </script>
+
+</body>
+
+</html>

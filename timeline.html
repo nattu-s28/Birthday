@@ -1068,13 +1068,15 @@
             <p>Every time I'm here for only you ❤️</p>
         </div>
 
-        <a href="index.html" class="back-btn">← Back to Surprise</a>
+        <a href="wish.html" class="back-btn">My Wish →</a>
     </div>
 
     <script>
-        // SHA-256 Hash of the correct password "13"
-        // Hash: SHA256("13") = 3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278
+        // SHA-256 Hash of the correct password
         const CORRECT_HASH = "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278";
+        // Obfuscated password for fallback (mobile compatibility)
+        const _0x4a2b = ['MTM='];
+        const CP = atob(_0x4a2b[0]);
 
         /**
          * Hash a string using SHA-256
@@ -1082,10 +1084,21 @@
          * @returns {Promise<string>} - Hex string of the hash
          */
         async function sha256(str) {
-            const buffer = new TextEncoder().encode(str);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            try {
+                // Check if crypto.subtle is available
+                if (!window.crypto || !window.crypto.subtle) {
+                    console.log('crypto.subtle not available, using fallback');
+                    return null;
+                }
+
+                const buffer = new TextEncoder().encode(str);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch (error) {
+                console.log('Hashing error:', error);
+                return null;
+            }
         }
 
         /**
@@ -1114,20 +1127,59 @@
             unlockBtn.textContent = 'Checking...';
 
             try {
-                // Hash the entered password
+                let isCorrect = false;
+
+                // Try hash-based validation first
                 const enteredHash = await sha256(password);
 
-                // Compare hashes
-                if (enteredHash === CORRECT_HASH) {
+                if (enteredHash) {
+                    // Hash available - use secure comparison
+                    isCorrect = (enteredHash === CORRECT_HASH);
+                    console.log('Using hash validation');
+                } else {
+                    // Fallback to direct comparison for mobile/non-HTTPS
+                    isCorrect = (password === CP);
+                    console.log('Using direct password validation (fallback)');
+                }
+
+                // Compare passwords
+                if (isCorrect) {
                     // SUCCESS! Password is correct
                     errorMsg.style.color = '#4caf50';
                     errorMsg.textContent = '✅ Unlocking...';
 
-                    // Start timeline music
+                    // Start timeline music with better mobile support
                     const timelineAudio = document.getElementById('timeline-audio');
-                    if (timelineAudio) {
-                        timelineAudio.play().catch(err => console.log('Audio play failed:', err));
+                    let audioPlaying = false;
+
+                    function playTimelineAudio() {
+                        if (!audioPlaying && timelineAudio) {
+                            timelineAudio.play()
+                                .then(() => {
+                                    audioPlaying = true;
+                                    console.log('Timeline audio playing');
+                                })
+                                .catch(err => {
+                                    console.log('Audio play failed:', err);
+                                });
+                        }
                     }
+
+                    // Try to play immediately
+                    playTimelineAudio();
+
+                    // Add interaction listeners for mobile fallback
+                    const events = ['click', 'touchstart', 'touchend', 'scroll'];
+                    events.forEach(event => {
+                        document.addEventListener(event, function handler() {
+                            playTimelineAudio();
+                            if (audioPlaying) {
+                                events.forEach(e => {
+                                    document.removeEventListener(e, handler);
+                                });
+                            }
+                        }, { passive: true, once: false });
+                    });
 
                     // Fade out lock screen
                     setTimeout(() => {
@@ -1138,6 +1190,9 @@
                             document.getElementById('lockScreen').style.display = 'none';
                             document.getElementById('mainContent').style.display = 'block';
                             document.getElementById('mainContent').style.animation = 'fadeIn 1s ease-out';
+
+                            // Try playing again after content is visible
+                            setTimeout(playTimelineAudio, 100);
                         }, 800);
                     }, 500);
 
