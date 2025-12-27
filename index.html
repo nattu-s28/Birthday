@@ -891,7 +891,7 @@
          STAGE 1: COUNTDOWN
          ======================================== -->
     <div id="countdown-stage" class="stage active">
-        <audio id="countdown-audio" src="Audio/love.mp3" loop preload="auto"></audio>
+        <audio id="countdown-audio" src="Audio/love.mpeg" loop preload="auto"></audio>
         <button id="music-toggle" class="btn"
             style="display: none; position: absolute; top: 10px; right: 10px; z-index: 100; padding: 10px 20px; font-size: 0.9rem;"
             onclick="toggleMusic()">🎵 Play Music</button>
@@ -1431,24 +1431,6 @@
          * ----------------------------------------
          */
         document.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('countdown-audio');
-            const musicBtn = document.getElementById('music-toggle');
-
-            if (audio) {
-                audio.volume = 1.0;
-                const playPromise = audio.play();
-
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log("Autoplay prevented:", error);
-                        // Show the play button
-                        if (musicBtn) {
-                            musicBtn.style.display = 'block';
-                            musicBtn.style.animation = 'pulse 1.5s infinite';
-                        }
-                    });
-                }
-            }
             startCountdown();
         });
 
@@ -1464,6 +1446,31 @@
                 musicBtn.textContent = "🎵 Play Music";
             }
         }
+
+        /* ========================================
+         * ENABLE MUSIC ON FIRST USER INTERACTION
+         * ======================================== */
+
+        function enableAudioOnFirstInteraction() {
+            const audio = document.getElementById('countdown-audio');
+            const musicBtn = document.getElementById('music-toggle');
+
+            if (!audio) return;
+
+            audio.volume = 1.0;
+            audio.play().then(() => {
+                if (musicBtn) musicBtn.style.display = 'none';
+            }).catch(() => {});
+
+            document.removeEventListener('click', enableAudioOnFirstInteraction);
+            document.removeEventListener('scroll', enableAudioOnFirstInteraction);
+            document.removeEventListener('touchstart', enableAudioOnFirstInteraction);
+        }
+
+        document.addEventListener('click', enableAudioOnFirstInteraction, { once: true });
+        document.addEventListener('scroll', enableAudioOnFirstInteraction, { once: true });
+        document.addEventListener('touchstart', enableAudioOnFirstInteraction, { once: true });
+
     </script>
 
 </body>
