@@ -892,9 +892,7 @@
          ======================================== -->
     <div id="countdown-stage" class="stage active">
         <audio id="countdown-audio" src="Audio/love.mpeg" loop preload="auto"></audio>
-        <button id="music-toggle" class="btn"
-            style="display: none; position: absolute; top: 10px; right: 10px; z-index: 100; padding: 10px 20px; font-size: 0.9rem;"
-            onclick="toggleMusic()">🎵 Play Music</button>
+
         <h1>Counting down to your(my)Special Day...</h1>
         <div id="countdown-timer">Loading...</div>
         <div class="countdown-label">DAYS : HOURS : MINS : SECS</div>
@@ -1440,25 +1438,11 @@
             startCountdown();
         });
 
-        function toggleMusic() {
-            const audio = document.getElementById('countdown-audio');
-            const musicBtn = document.getElementById('music-toggle');
-            if (audio.paused) {
-                audio.play();
-                musicBtn.textContent = "🔇 Stop Music";
-                musicBtn.style.animation = 'none'; // Stop pulsing once clicked
-            } else {
-                audio.pause();
-                musicBtn.textContent = "🎵 Play Music";
-            }
-        }
-
         /* ========================================
          * UNIVERSAL AUDIO UNLOCK (MOBILE + DESKTOP)
          * ======================================== */
         function initAudioUnlock() {
             const audio = document.getElementById('countdown-audio');
-            const musicBtn = document.getElementById('music-toggle');
 
             // Define the unlock function
             const unlock = () => {
@@ -1472,17 +1456,11 @@
 
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
-                        // success
-                        if (musicBtn) {
-                            musicBtn.style.display = 'none';
-                        }
-
-                        // Remove listeners once successful
+                        // Success - Remove listeners
                         cleanUpListeners();
                     }).catch(error => {
                         console.log("Autoplay prevented:", error);
-                        // Show button so user can manually click
-                        if (musicBtn) musicBtn.style.display = 'block';
+                        // User requested no button, so we just wait for the next interaction
                     });
                 }
             };
