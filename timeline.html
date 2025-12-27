@@ -675,6 +675,9 @@
         </div>
     </div>
 
+    <!-- Timeline Audio -->
+    <audio id="timeline-audio" src="Audio/Song2.mpeg" loop preload="auto"></audio>
+
     <div class="container" id="mainContent" style="display: none;">
         <header>
             <h1>Our Loveline</h1>
@@ -1119,6 +1122,12 @@
                     // SUCCESS! Password is correct
                     errorMsg.style.color = '#4caf50';
                     errorMsg.textContent = '✅ Unlocking...';
+
+                    // Start timeline music
+                    const timelineAudio = document.getElementById('timeline-audio');
+                    if (timelineAudio) {
+                        timelineAudio.play().catch(err => console.log('Audio play failed:', err));
+                    }
 
                     // Fade out lock screen
                     setTimeout(() => {

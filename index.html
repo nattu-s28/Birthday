@@ -891,6 +891,7 @@
          ======================================== -->
     <div id="countdown-stage" class="stage active">
         <audio id="countdown-audio" src="Audio/love.mpeg" loop preload="auto"></audio>
+        <audio id="celebration-audio" src="Audio/Song1.mpeg" loop preload="auto"></audio>
 
         <h1>Counting down to your(my)Special Day...</h1>
         <div id="countdown-timer">Loading...</div>
@@ -982,10 +983,16 @@
         function nextStage() {
             // Stop countdown music when leaving the first stage
             if (currentStageIndex === 0) {
-                const audio = document.getElementById('countdown-audio');
-                if (audio) {
-                    audio.pause();
-                    audio.currentTime = 0;
+                const countdownAudio = document.getElementById('countdown-audio');
+                if (countdownAudio) {
+                    countdownAudio.pause();
+                    countdownAudio.currentTime = 0;
+                }
+
+                // Start celebration music when entering stage 2
+                const celebrationAudio = document.getElementById('celebration-audio');
+                if (celebrationAudio) {
+                    celebrationAudio.play().catch(err => console.log('Audio play failed:', err));
                 }
             }
             document.getElementById(STAGES[currentStageIndex]).classList.remove('active');
@@ -1480,6 +1487,13 @@
          * ----------------------------------------
          */
         function openGift() {
+            // Stop celebration music when opening gift
+            const celebrationAudio = document.getElementById('celebration-audio');
+            if (celebrationAudio) {
+                celebrationAudio.pause();
+                celebrationAudio.currentTime = 0;
+            }
+
             // Massive confetti explosion
             for (let i = 0; i < 150; i++) {
                 setTimeout(() => {
