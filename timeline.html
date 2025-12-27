@@ -70,6 +70,172 @@
             }
         }
 
+        /* Password Lock Screen */
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--bg-violet) 0%, var(--bg-dark) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .lock-container {
+            text-align: center;
+            padding: 50px;
+            background: rgba(26, 0, 51, 0.9);
+            border-radius: 20px;
+            border: 2px solid var(--neon-violet);
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.6);
+            max-width: 450px;
+            width: 90%;
+            animation: lockFadeIn 0.8s ease-out;
+            backdrop-filter: blur(10px);
+        }
+
+        .lock-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: lockPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.6));
+        }
+
+        .lock-container h2 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3rem;
+            color: var(--neon-pink);
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .lock-container p {
+            color: var(--text-gold);
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        #passwordInput {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.3rem;
+            border: 2px solid var(--neon-violet);
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            letter-spacing: 3px;
+        }
+
+        #passwordInput:focus {
+            outline: none;
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 25px rgba(255, 20, 147, 0.6);
+            transform: scale(1.02);
+        }
+
+        #passwordInput::placeholder {
+            letter-spacing: normal;
+        }
+
+        #unlockBtn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 20, 147, 0.5);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #unlockBtn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(255, 20, 147, 0.8);
+        }
+
+        #unlockBtn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        #unlockBtn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #errorMsg {
+            color: #ff4444;
+            margin-top: 20px;
+            font-weight: 600;
+            min-height: 24px;
+            font-size: 1.1rem;
+        }
+
+        .error-shake {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-10px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(10px);
+            }
+        }
+
+        @keyframes lockFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes lockPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 0.7;
+            }
+        }
+
         .container {
             position: relative;
             z-index: 1;
@@ -497,7 +663,19 @@
 
 <body>
 
-    <div class="container">
+    <!-- Password Lock Screen -->
+    <div id="lockScreen">
+        <div class="lock-container">
+            <div class="lock-icon">🔒</div>
+            <h2>Protected Timeline</h2>
+            <p>Enter the secret key to unlock our memories</p>
+            <input type="password" id="passwordInput" placeholder="Enter the Pass You Know it" autocomplete="off">
+            <button id="unlockBtn" onclick="attemptUnlock()">Unlock 🔓</button>
+            <div id="errorMsg"></div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent" style="display: none;">
         <header>
             <h1>Our Loveline</h1>
         </header>
@@ -889,6 +1067,105 @@
 
         <a href="index.html" class="back-btn">← Back to Surprise</a>
     </div>
+
+    <script>
+        // SHA-256 Hash of the correct password "13"
+        // Hash: SHA256("13") = 3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278
+        const CORRECT_HASH = "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278";
+
+        /**
+         * Hash a string using SHA-256
+         * @param {string} str - String to hash
+         * @returns {Promise<string>} - Hex string of the hash
+         */
+        async function sha256(str) {
+            const buffer = new TextEncoder().encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        /**
+         * Attempt to unlock the timeline with user-provided password
+         */
+        async function attemptUnlock() {
+            const passwordInput = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMsg');
+            const unlockBtn = document.getElementById('unlockBtn');
+            const lockContainer = document.querySelector('.lock-container');
+            const password = passwordInput.value.trim();
+
+            // Clear previous errors
+            errorMsg.textContent = '';
+            lockContainer.classList.remove('error-shake');
+
+            // Validate input
+            if (!password) {
+                errorMsg.textContent = '❌ Please enter the password';
+                lockContainer.classList.add('error-shake');
+                return;
+            }
+
+            // Disable button during validation
+            unlockBtn.disabled = true;
+            unlockBtn.textContent = 'Checking...';
+
+            try {
+                // Hash the entered password
+                const enteredHash = await sha256(password);
+
+                // Compare hashes
+                if (enteredHash === CORRECT_HASH) {
+                    // SUCCESS! Password is correct
+                    errorMsg.style.color = '#4caf50';
+                    errorMsg.textContent = '✅ Unlocking...';
+
+                    // Fade out lock screen
+                    setTimeout(() => {
+                        document.getElementById('lockScreen').style.opacity = '0';
+                        document.getElementById('lockScreen').style.transition = 'opacity 0.8s ease';
+
+                        setTimeout(() => {
+                            document.getElementById('lockScreen').style.display = 'none';
+                            document.getElementById('mainContent').style.display = 'block';
+                            document.getElementById('mainContent').style.animation = 'fadeIn 1s ease-out';
+                        }, 800);
+                    }, 500);
+
+                } else {
+                    // WRONG PASSWORD
+                    errorMsg.textContent = '❌ Wrong password! Try again';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    lockContainer.classList.add('error-shake');
+
+                    // Re-enable button
+                    unlockBtn.disabled = false;
+                    unlockBtn.textContent = 'Unlock 🔓';
+                }
+            } catch (error) {
+                console.error('Hash error:', error);
+                errorMsg.textContent = '❌ An error occurred. Please try again.';
+                unlockBtn.disabled = false;
+                unlockBtn.textContent = 'Unlock 🔓';
+            }
+        }
+
+        // Enter key support
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('passwordInput');
+
+            // Allow Enter key to submit
+            passwordInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    attemptUnlock();
+                }
+            });
+
+            // Auto-focus on password field
+            passwordInput.focus();
+        });
+    </script>
 
 </body>
 
