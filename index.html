@@ -1454,50 +1454,60 @@
         }
 
         /* ========================================
-         * ENABLE MUSIC ON FIRST USER INTERACTION
+         * UNIVERSAL AUDIO UNLOCK (MOBILE + DESKTOP)
          * ======================================== */
-
-        function enableAudioOnFirstInteraction() {
+        function initAudioUnlock() {
             const audio = document.getElementById('countdown-audio');
             const musicBtn = document.getElementById('music-toggle');
 
-            if (!audio) return;
+            // Define the unlock function
+            const unlock = () => {
+                if (!audio) return;
 
-            audio.volume = 1.0;
-            audio.play().then(() => {
-                if (musicBtn) musicBtn.style.display = 'none';
-            }).catch(() => {});
+                // Try to play
+                audio.volume = 1.0;
+                audio.muted = false;
 
-            document.removeEventListener('click', enableAudioOnFirstInteraction);
-            document.removeEventListener('scroll', enableAudioOnFirstInteraction);
-            document.removeEventListener('touchstart', enableAudioOnFirstInteraction);
+                const playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // success
+                        if (musicBtn) {
+                            musicBtn.textContent = "🔇 Stop Music";
+                            musicBtn.style.animation = 'none';
+                            // If we want to hide it automatically:
+                            // musicBtn.style.display = 'none'; 
+                            // But keeping it visible as a toggle is better UX
+                            musicBtn.style.display = 'block';
+                        }
+
+                        // Remove listeners once successful
+                        cleanUpListeners();
+                    }).catch(error => {
+                        console.log("Autoplay prevented:", error);
+                        // Show button so user can manually click
+                        if (musicBtn) musicBtn.style.display = 'block';
+                    });
+                }
+            };
+
+            const cleanUpListeners = () => {
+                document.removeEventListener('click', unlock);
+                document.removeEventListener('touchstart', unlock);
+                document.removeEventListener('scroll', unlock);
+                document.removeEventListener('keydown', unlock);
+            };
+
+            // Add listeners for any interaction
+            document.addEventListener('click', unlock, { once: true });
+            document.addEventListener('touchstart', unlock, { once: true });
+            document.addEventListener('scroll', unlock, { once: true });
+            document.addEventListener('keydown', unlock, { once: true });
         }
 
-        document.addEventListener('click', enableAudioOnFirstInteraction, { once: true });
-        document.addEventListener('scroll', enableAudioOnFirstInteraction, { once: true });
-        document.addEventListener('touchstart', enableAudioOnFirstInteraction, { once: true });
-
-
-        /* ========================================
-        MOBILE SAFE AUDIO START
-        ======================================== */
-
-        function unlockAudioForMobile() {
-            const audio = document.getElementById('countdown-audio');
-            if (!audio) return;
-
-            audio.muted = false;   // allow sound
-            audio.volume = 1.0;
-
-            audio.play().catch(() => {});
-
-            document.removeEventListener('touchstart', unlockAudioForMobile);
-            document.removeEventListener('click', unlockAudioForMobile);
-        }
-
-        // MOBILE NEEDS TOUCH
-        document.addEventListener('touchstart', unlockAudioForMobile, { once: true });
-        document.addEventListener('click', unlockAudioForMobile, { once: true });
+        // Initialize immediately
+        initAudioUnlock();
 
 
     </script>
