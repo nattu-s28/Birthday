@@ -649,8 +649,10 @@
         }
 
         .surprise-box {
-            width: 28px;
+            width: auto;
+            min-width: 28px;
             height: 38px;
+            padding: 0 8px;
             border: 2px solid var(--neon-violet);
             border-radius: 6px;
             background: rgba(26, 0, 51, 0.8);
@@ -658,10 +660,10 @@
             align-items: center;
             justify-content: center;
             font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: var(--text-gold);
-            text-shadow: 0 0 5px var(--neon-pink);
+            font-weight: 500;
+            font-size: 1.1rem;
+            color: var(--text-silver);
+            text-shadow: 0 0 8px rgba(224, 224, 224, 0.4);
             box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
             transition: all 0.3s ease;
             position: relative;
@@ -763,11 +765,13 @@
         }
 
         .final-overlay h2 {
-            font-family: 'Sacramento', cursive;
-            font-size: 3rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
             color: var(--text-gold);
             margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.3);
+            letter-spacing: 1px;
         }
 
         /* 
@@ -890,7 +894,7 @@
          STAGE 1: COUNTDOWN
          ======================================== -->
     <div id="countdown-stage" class="stage active">
-        <audio id="countdown-audio" src="Audio/love.mpeg" loop preload="auto"></audio>
+        <audio id="countdown-audio" src="" loop preload="auto"></audio>
         <audio id="celebration-audio" src="Audio/Song1.mpeg" loop preload="auto"></audio>
 
         <h1>Counting down to your(my)Special Day...</h1>
@@ -904,7 +908,7 @@
 
             <!-- Advance Wish -->
             <div class="advance-wish-container">
-                <div class="advance-wish">Advance Happiest Birthday Mah❤️</div>
+                <div class="advance-wish">Wish You Happie Birthday Mah❤️</div>
             </div>
 
         </div>
