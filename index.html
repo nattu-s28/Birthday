@@ -425,36 +425,113 @@
         }
 
         /* Balloon Animation */
-        .balloon {
+        /* Balloon Group Container - Moves as one unit */
+        .balloon-group {
             position: absolute;
-            width: 60px;
-            height: 80px;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            opacity: 0;
-            animation: floatIn 1s ease-out forwards, floatHover 3s ease-in-out infinite alternate;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+            /* Start well below screen */
+            bottom: -50vh;
+            /* Left will be set by JS logic */
+
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            user-select: none;
-            z-index: 20;
+            z-index: 100;
+            cursor: pointer;
+            width: 100px;
+
+            transform-origin: center bottom;
+            /* Center balloon at assigned position + keep small size */
+            transform: translateX(-50%) scale(0.7);
+
+            /* Smooth transitions:
+               - bottom: controls the rise duration (set to 15s for VERY SLOW)
+               - left: allows for gentle horizontal drifting if needed
+            */
+            transition: bottom 15s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.3s ease;
+            will-change: bottom;
         }
 
+        /* The Balloon Element */
+        .balloon {
+            width: 90px;
+            height: 110px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.1), 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Balloon Shine */
         .balloon::before {
             content: '';
             position: absolute;
-            bottom: -20px;
+            top: 15%;
+            left: 20%;
+            width: 12px;
+            height: 25px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(45deg);
+        }
+
+        /* Balloon Knot */
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.3);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 8px solid inherit;
+            /* Takes balloon color */
+        }
+
+        /* String */
+        .balloon-string {
+            width: 1.5px;
+            height: 50px;
+            /* Slight increase for elegance */
+            background: rgba(255, 255, 255, 0.7);
+            margin-top: -2px;
+        }
+
+        /* The Character Image */
+        .balloon-group img {
+            width: 100px;
+            height: auto;
+            object-fit: contain;
+            margin-top: -3px;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Gentle Hover Animation (Restricted) */
+        .balloon-group.floating {
+            animation: gentleBob 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes gentleBob {
+            0% {
+                transform: translateX(-50%) scale(0.7) translateY(0);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(0.7) translateY(-10px);
+            }
+        }
+
+        /* Pop Interaction */
+        .balloon.popped {
+            animation: pop 0.2s ease-out forwards;
+        }
+
+        .balloon-group.popped img {
+            opacity: 0;
+            transform: translateY(30px) rotate(5deg);
+        }
+
+        .balloon-group.popped .balloon-string {
+            opacity: 0;
         }
 
         .advance-wish {
@@ -514,15 +591,7 @@
             width: 100%;
         }
 
-        .balloon::after {
-            content: '▼';
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.5);
-        }
+
 
         .balloon.popped {
             animation: pop 0.3s ease-out forwards;
@@ -907,6 +976,10 @@
                 <div class="advance-wish">Advance Happiest Birthday Mah❤️</div>
             </div>
 
+            <!-- Emergency Enter Button -->
+            <button class="btn" style="margin-top: 50px; opacity: 0.6; font-size: 0.8rem;"
+                onclick="nextStage()">Emergency Enter 🚨</button>
+
 
         </div>
     </div>
@@ -1272,66 +1345,180 @@
          */
         let balloonsPopped = 0;
 
+
+
+
+
+
+
+
+        /* 
+         * ----------------------------------------
+         * BALLOON GAME: SEQUENTIAL & IMAGE BASED
+         * ----------------------------------------
+         */
+
+        // Configuration for images - map letters to images cyclically or specifically
+        // Using the images found in the directory
+        const BALLOON_IMAGES = [
+            'images/b1.png', 'images/b2.png', 'images/b3.png', 'images/b4.png',
+            'images/b5.png', 'images/b6.png', 'images/b7.png', 'images/b8.png',
+            'images/b9.png', 'images/b10.png', 'images/b11.png', 'images/b12.png', 'images/b13.png'
+        ];
+        /* Balloon Logic: Random Float & Pop-to-Reveal */
+        let isBalloonStageActive = false; // New LOCK flag
+
         function createBalloons() {
-            const name = "Thoongu Munchi";
-            const letters = name.replace(/\s/g, '').split(''); // "ThoonguMunchi" (13 chars)
-            const colors = ['#ff1493', '#ffd700', '#00ff00', '#00bfff', '#9d4edd', '#ff6347', '#ff69b4', '#32cd32', '#ffa500', '#da70d6'];
+            // IMMEDIATE GUARD: If already active, stop.
+            if (isBalloonStageActive) return;
+            isBalloonStageActive = true; // Lock immediately
+
+            // 1. CLEANUP: Remove any existing balloons first just in case
+            const existingBalloons = document.querySelectorAll('.balloon-group');
+            if (existingBalloons.length > 0) {
+                existingBalloons.forEach(b => b.remove());
+            }
+
             const cakeStage = document.getElementById('cake-stage');
             const nameContainer = document.getElementById('name-container');
 
-            // Clear container
+            // 2. HIDE CAKE & BUTTON
+            // Also disable button to prevent further clicks
+            const cakeBtn = document.getElementById('cake-btn');
+            cakeBtn.style.display = 'none';
+            cakeBtn.disabled = true;
+
+            document.getElementById('cake-container').style.display = 'none';
+
+            const name = "Thoongu Munchi";
+            const letters = name.replace(/\s/g, '').split(''); // "ThoonguMunchi" (13 chars)
+            const colors = ['#ff1493', '#ffd700', '#00ff00', '#00bfff', '#9d4edd', '#ff6347', '#ff69b4', '#32cd32', '#ffa500', '#da70d6'];
+
+            // Reset state
+            currentBalloonIndex = 0;
             nameContainer.innerHTML = '';
             nameContainer.style.opacity = '1';
+            balloonsPopped = 0; // Ensure counter is reset
 
             // Create 13 Surprise Boxes
             letters.forEach((char, index) => {
                 const box = document.createElement('div');
                 box.classList.add('surprise-box');
                 box.id = `box-${index}`;
-                // Initially empty
+                box.dataset.char = char;
                 nameContainer.appendChild(box);
             });
 
-            // Create 13 Balloons
-            letters.forEach((char, i) => {
+            // --- MOBILE-SAFE CENTERED DISTRIBUTION (25% to 75%) ---
+            // Much tighter range to keep all balloons centered and in-frame
+            const slots = [];
+            const startX = 25;  // Moved from 15% to 25%
+            const endX = 75;    // Moved from 85% to 75%
+            // 13 points evenly spread
+            const step = (endX - startX) / (letters.length - 1);
+
+            for (let i = 0; i < letters.length; i++) {
+                slots.push(startX + (i * step));
+            }
+
+            // Shuffle slots for randomness
+            for (let i = slots.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [slots[i], slots[j]] = [slots[j], slots[i]];
+            }
+
+            // Spawn exactly 13 balloons
+            for (let i = 0; i < letters.length; i++) {
                 setTimeout(() => {
-                    const balloon = document.createElement('div');
-                    balloon.classList.add('balloon');
-                    balloon.dataset.letter = char;
-                    balloon.dataset.index = i; // Map to specific box
-                    balloon.style.backgroundColor = colors[i % colors.length];
+                    spawnFloatingBalloon(i, colors, cakeStage, letters.length, slots[i]);
+                }, i * 300);
+            }
+        }
 
-                    const leftPos = 10 + Math.random() * 80;
-                    const topPos = 10 + Math.random() * 40;
+        function spawnFloatingBalloon(index, colors, container, totalCount, assignedLeft) {
+            const group = document.createElement('div');
+            group.classList.add('balloon-group');
 
-                    balloon.style.left = `${leftPos}%`;
-                    balloon.style.top = `${topPos}%`;
-                    balloon.style.animationDelay = `${Math.random() * 0.5}s`;
+            // No jitter - use exact position to prevent out-of-bounds
+            const finalLeft = assignedLeft;
 
-                    balloon.onclick = function () {
-                        if (!this.classList.contains('popped')) {
-                            this.classList.add('popped');
+            // Vertical Stagger (Randomized Layers)
+            // Range: 25% to 55% from bottom (Safe center band)
+            // This ensures they don't hit the top or cover the boxes too much
+            const baseBottom = 40;
+            const bottomVariance = (Math.random() * 30) - 15;
+            const finalBottom = baseBottom + bottomVariance;
 
-                            // Reveal the specific box
-                            const targetBox = document.getElementById(`box-${this.dataset.index}`);
-                            if (targetBox) {
-                                targetBox.classList.add('revealed');
-                                targetBox.innerHTML = `<span>${this.dataset.letter}</span>`;
-                            }
+            // Apply Styles
+            group.style.left = `${finalLeft}%`;
+            group.style.bottom = '-60vh'; // Start well below viewport
 
-                            balloonsPopped++;
+            // Visual Elements
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
+            balloon.style.backgroundColor = colors[index % colors.length];
+            balloon.style.borderBottomColor = colors[index % colors.length];
 
-                            if (balloonsPopped === letters.length) {
-                                setTimeout(() => {
-                                    finishBalloonStage();
-                                }, 1000);
-                            }
-                        }
-                    };
+            const string = document.createElement('div');
+            string.classList.add('balloon-string');
 
-                    cakeStage.appendChild(balloon);
-                }, i * 150);
+            const img = document.createElement('img');
+            const imgPath = BALLOON_IMAGES[index % BALLOON_IMAGES.length];
+            img.src = imgPath;
+            img.alt = "Memory";
+
+            group.appendChild(balloon);
+            group.appendChild(string);
+            group.appendChild(img);
+
+            container.appendChild(group);
+
+            // Force Reflow for Mobile Safari/Chrome transition
+            void group.offsetWidth;
+
+            // ANIMATION TRIGGER
+            // Use requestAnimationFrame to ensure the 'bottom' transition happens
+            // after the element is painted at -60vh.
+            requestAnimationFrame(() => {
+                group.style.bottom = `${finalBottom}%`;
             });
+
+            // Add bobbing animation after the rise is roughly complete
+            // Transition is set to 15s in CSS, so we wait slightly less to start blending
+            setTimeout(() => {
+                group.classList.add('floating');
+            }, 14000);
+
+            // CLICK INTERACTION
+            group.onclick = function () {
+                if (this.dataset.clicked === "true") return;
+                this.dataset.clicked = "true";
+
+                // Pop Animation
+                balloon.classList.add('popped');
+                this.classList.add('popped');
+
+                // Reveal Letter
+                const allBoxes = document.querySelectorAll('.surprise-box');
+                for (let box of allBoxes) {
+                    if (!box.classList.contains('revealed')) {
+                        box.classList.add('revealed');
+                        // Use the dataset char we stored earlier
+                        box.innerHTML = `<span>${box.dataset.char}</span>`;
+                        break;
+                    }
+                }
+
+                balloonsPopped++;
+
+                // Cleanup
+                setTimeout(() => {
+                    this.remove();
+                    if (balloonsPopped === totalCount) {
+                        setTimeout(finishBalloonStage, 1000);
+                    }
+                }, 300);
+            };
         }
 
         function finishBalloonStage() {
@@ -1346,16 +1533,17 @@
             nameContainer.style.opacity = '0';
 
             setTimeout(() => {
-                // 3. Clear boxes and show wish
-                nameContainer.innerHTML = "Happy Birthday My Dear Thoongu Munchi!❤️";
+                // 3. Clear boxes and show FINAL MESSAGE
+                nameContainer.innerHTML = "Wish You Happiest Birthday My Dear Thoongu Munchi ❤️";
 
-                // 4. Style the wish
+                // 4. Style the final message
                 nameContainer.style.fontFamily = "'Sacramento', cursive";
                 nameContainer.style.fontSize = "3rem";
                 nameContainer.style.color = "var(--text-gold)";
                 nameContainer.style.textShadow = "0 0 20px var(--neon-pink)";
-                nameContainer.style.display = "block"; // Ensure block display for text
+                nameContainer.style.display = "block";
                 nameContainer.style.textAlign = "center";
+                nameContainer.style.lineHeight = "1.4";
 
                 // 5. Fade back in
                 nameContainer.style.opacity = '1';
@@ -1364,10 +1552,21 @@
                 const btn = document.getElementById('cake-btn');
                 btn.textContent = "Read My Letter →";
                 btn.style.display = 'inline-block';
+                btn.style.marginTop = "30px";
+                btn.disabled = false; // Re-enable the button
                 btn.onclick = nextStage;
 
-                // Confetti celebration
+                // Massive Confetti 
                 blastConfetti(document.getElementById('partyDecor'));
+
+                // Extra celebration loop
+                let celebrationCount = 0;
+                const celebrate = setInterval(() => {
+                    blastConfetti(document.getElementById('partyDecor'));
+                    celebrationCount++;
+                    if (celebrationCount > 3) clearInterval(celebrate);
+                }, 800);
+
             }, 1000);
         }
 
